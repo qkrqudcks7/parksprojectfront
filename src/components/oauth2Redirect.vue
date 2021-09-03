@@ -6,7 +6,7 @@
 export default {
   name: 'oauth2Redirect',
   created () {
-    const token = this.$router.query.token
+    const token = this.$route.query.token
     console.log(token)
     if (token) {
       this.$store.commit('setToken', token)
