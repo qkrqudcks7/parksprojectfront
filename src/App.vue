@@ -1,58 +1,45 @@
 <template>
   <div id="app">
-    <app-header />
-    <br>
-    <b-container class="text-center">
-      <b-row align-h="start">
-        <b-col cols="4" class="bg-primary">ㅌㅇ</b-col>
-        <b-col cols="2" class="bg-danger">gd</b-col>
-        <b-col cols="6" class="bg-dark">gd</b-col>
-      </b-row>
-      <b-row>
-        <b-col sm="2" class="bg-primary">gd</b-col>
-        <b-col sm="8" class="bg-danger">gd</b-col>
-        <b-col sm="2" class="bg-dark">gd</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="bg-primary">gd</b-col>
-        <b-col cols="12" md="auto" class="bg-danger">gd</b-col>
-        <b-col col lg="4" class="bg-dark">gd</b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12" md="8" class="bg-primary">gd</b-col>
-        <b-col cols="6" md="4" class="bg-danger">gd</b-col>
-      </b-row>
-      <b-row>
-        <b-col md="4" class="bg-primary">gd</b-col>
-        <b-col md="4" offset-md="4" class="bg-danger">gd</b-col>
-        <b-col md="6" offset-md="3" class="bg-dark">md="6" offset-md="3"</b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col md="3" class="bg-primary ml-md-auto p-3">dd</b-col>
-        <b-col md="4" class="bg-danger ml-md-auto">gd</b-col>
-        <b-col class="bg-dark">gd</b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col md="3" class="ml-md-auto p-3 bg-info">dd</b-col>
-        <b-col md="3" class="ml-md-auto p-3 bg-danger">gd</b-col>
-      </b-row>
-      <b-row cols="2">
-        <b-col>dd</b-col>
-        <b-col>dd</b-col>
-        <b-col>dd</b-col>
-        <b-col>dd</b-col>
-      </b-row>
-    </b-container>
-    <router-view/>
+    <notifications group = "noti" possition = "bottom center" />
+    <app-header @logout = 'logout' />
+    <router-view @getUserDetails = 'getUserDetails' />
   </div>
 </template>
 
 <script>
 import appHeader from './components/header'
+import notification from './custom/notification'
 export default {
   name: 'App',
   components: {
     appHeader
+  },
+  created () {
+    this.getUserDetails()
+  },
+  methods: {
+    async getUserDetails () {
+      try {
+        const token = this.$store.getters.token
+        if (token == null || token === 'null' || token === '') {
+          return
+        }
+        console.log('토큰:' + token)
+        const response = await this.axios.get('/user/me')
+        if (response.status === 200) {
+          this.$store.commit('setUserDetail', response.data)
+        }
+      } catch (err) {
+        notification.error(err, '사용자 정보를 불러올 수 없습니다.', () => {
+          this.logout()
+        })
+      }
+    },
+    logout () {
+      this.$store.commit('setToken', null)
+      this.$store.commit('setUserDetail', null)
+      this.$router.replace('/')
+    }
   }
 }
 </script>
