@@ -6,17 +6,17 @@
       </div>
       <ul class="gnb">
         <li><a href="#">Home</a></li>
-        <li><a href="/login">로그인</a></li>
-        <li><a @click="logout">로그아웃</a></li>
-        <li><a href="#">Plan & History</a></li>
         <li><a href="#">Awards</a></li>
         <li><a href="#">LocaRegistrationtion</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
-      <div class="sns">
-        <a href="#">facebook</a>
-        <a href="#">twitter</a>
-        <a href="#">youtube</a>
+      <div class="sns" v-if="this.$store.getters.authenticated">
+        <a href="/profile">프로필</a>
+        <a @click="logout">로그아웃</a>
+      </div>
+      <div class="sns" v-else>
+        <a href="#">로그인</a>
+        <a href="/signup">회원가입</a>
       </div>
     </nav>
   </header>
@@ -50,7 +50,7 @@ button {
   outline: none;
 }
 header {
-  background-color: royalblue;
+  background-color: #0388fc;
   display: flex;
   justify-content: center;
   height: 60px;

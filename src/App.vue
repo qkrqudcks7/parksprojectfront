@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notifications group = "noti" possition = "bottom center" />
+    <notifications group = "noti" position = "bottom center" />
     <app-header @logout = 'logout' />
     <router-view @getUserDetails = 'getUserDetails' />
   </div>
@@ -24,8 +24,8 @@ export default {
         if (token == null || token === 'null' || token === '') {
           return
         }
-        console.log('토큰:' + token)
-        const response = await this.axios.get('/user/me')
+        const response = await this.axios.get('/user/info')
+        console.log(response)
         if (response.status === 200) {
           this.$store.commit('setUserDetail', response.data)
         }
@@ -36,9 +36,10 @@ export default {
       }
     },
     logout () {
+      console.log('로그아웃')
       this.$store.commit('setToken', null)
       this.$store.commit('setUserDetail', null)
-      this.$router.replace('/')
+      this.$router.push('/')
     }
   }
 }

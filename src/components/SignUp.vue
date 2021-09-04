@@ -17,7 +17,7 @@
         <button class="btn facebook">Login in with Facebook</button>
       </div>
       <div class="login">
-        <button class="btn-login">로그인</button>
+        <button class="btn-login">회원가입</button>
       </div>
     </div>
   </body>
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'SignUp',
   methods: {
     getOauthUrl (platform) {
       return `${process.env.VUE_APP_API}/oauth2/authorize/${platform}?redirect_uri=http://localhost:8081/oauth2/redirect`
