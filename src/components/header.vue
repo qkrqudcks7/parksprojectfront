@@ -2,10 +2,10 @@
   <header>
     <nav>
       <div class="logo">
-        <a href="#"><img src="logo.png"></a>
+        <a href="/">홈</a>
       </div>
       <ul class="gnb">
-        <li><a href="#">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="#">Awards</a></li>
         <li><a href="#">LocaRegistrationtion</a></li>
         <li><a href="#">Contact</a></li>
@@ -62,8 +62,24 @@ nav {
   justify-content: space-between;
 
 }
-.logo {
-
+.logo a{
+  color: white;
+  position: relative;
+  padding-bottom: 8px;
+}
+.logo a:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #eeeeee;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 0;
+  transition: 0.3s;
+}
+.logo a:hover:after {
+  width: 100%;
 }
 .logo img {
   filter: invert();
@@ -78,21 +94,47 @@ nav {
 .gnb li {
 }
 .gnb li a{
-  margin: 10px;
+  margin: 10px 50px;
   color: white;
+  position: relative;
+  padding-bottom: 8px;
 }
-.gnb li a:hover{
-  color: black;
+.gnb li a:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #eeeeee;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 0;
+  transition: 0.3s;
+}
+.gnb li a:hover:after{
+  width: 100%;
 }
 .sns {
   text-align: center;
 }
 .sns a {
   color: white;
-  margin: 5px;
+  margin: 5px 20px;
+  position: relative;
+  padding-bottom: 8px;
 }
-.sns a:hover {
-  color: black;
+.sns a:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #eeeeee;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 0;
+  transition: 0.3s;
+}
+.sns a:hover:after {
+  width: 100%;
 }
 
 @media (max-width: 768px) {
