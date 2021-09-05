@@ -2,7 +2,7 @@
   <header>
     <nav>
       <div class="logo">
-        <a href="/">홈</a>
+        <a href="/">홈페이지</a>
       </div>
       <ul class="gnb">
         <li><a href="/addStudy">스터디 만들기</a></li>
