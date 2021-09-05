@@ -6,6 +6,7 @@ import Oauth2Redirect from '../components/oauth2Redirect'
 import Profile from '../components/profile'
 import authentication from '../custom/authentication'
 import AddStudy from '../components/addStudy'
+import Login from '../components/login'
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +33,11 @@ export default new Router({
       name: 'Profile',
       component: Profile,
       beforeEnter: authentication.isAuthenticated
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/addstudy',

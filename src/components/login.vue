@@ -1,15 +1,12 @@
 <template>
   <body>
     <div class="login-form">
-      <h2>회원가입</h2>
+      <h2>로그인</h2>
       <div class="field">
-        <label>Username</label><input type="text">
+        <label>Email</label><input type="email" v-model="user.email">
       </div>
       <div class="field">
-        <label>Email</label><input type="email">
-      </div>
-      <div class="field">
-        <label>Password</label><input type="password">
+        <label>Password</label><input type="password" v-model="user.password">
       </div>
       <div class="sns-login">
         <button class="btn google"><a v-bind:href="getOauthUrl('google')">Login in with Google</a></button>
@@ -17,21 +14,20 @@
         <button class="btn facebook">Login in with Facebook</button>
       </div>
       <div class="login">
-        <button class="btn-login" @click="signup()">회원가입</button>
+        <button class="btn-login" @click="login()">로그인</button>
       </div>
+      <span><a id="signup" href="/signup">계정이 없으신가요? 회원가입 하세요!</a></span>
     </div>
   </body>
 </template>
 
 <script>
 import notification from '../custom/notification'
-
 export default {
-  name: 'SignUp',
+  name: 'login',
   data () {
     return {
       user: {
-        name: '',
         email: '',
         password: ''
       }
@@ -41,19 +37,21 @@ export default {
     getOauthUrl (platform) {
       return `${process.env.VUE_APP_API}/oauth2/authorize/${platform}?redirect_uri=http://localhost:8081/oauth2/redirect`
     },
-    async signup () {
+    async login () {
       try {
-        const response = await this.axios.post('/auth/signup')
-        notification.success(response, '회원가입 성공', () => {
-          this.$router.push('/login')
+        const response = await this.axios.post('/auth/login', this.user)
+        notification.success(response, '로그인 성공', () => {
+          this.$store.commit('setToken', response.data.accessToken)
+          this.$emit('getUserDetails')
+          this.$router.push('/profile')
         })
       } catch (err) {
         this.$notify({
           group: 'noti',
           type: 'error',
           duration: 6000,
-          title: '회원가입 오류',
-          text: '올바른 정보를 입력해주세요'
+          title: '로그인 실패',
+          text: '아이디와 비밀번호를 확인해주세요!.'
         })
       }
     }
@@ -77,6 +75,13 @@ body {
 a{
   text-decoration: none;
   color: white;
+}
+#signup {
+  color: black;
+}
+#signup:hover{
+  color: skyblue;
+  font-weight: bold;
 }
 h1,h2,h3,h4,h5,h6 {
   margin: 0;

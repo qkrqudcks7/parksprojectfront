@@ -1,6 +1,8 @@
 <template>
   <body>
   <section>
+    <h1>내 프로필</h1>
+    <hr>
     <div class="row">
       <div class="columns" v-if="this.$store.getters.user">
         <img v-bind:src="this.$store.getters.user.imageUrl" v-bind:alt="this.$store.getters.user.name" />
@@ -16,7 +18,6 @@
         </div>
       </div>
     </div>
-    <div>ddddd</div>
   </section>
   </body>
 </template>
@@ -36,6 +37,13 @@ export default {
   h1,h2,h3,h4,h5,h6 {
     margin: 0;
     font-weight: normal;
+  }
+  h1 {
+    text-align: center;
+    margin-top: 30px;
+  }
+  hr {
+    height: 3px;
   }
   button {
     cursor: pointer;
@@ -78,5 +86,10 @@ export default {
   }
   .columns img {
     width: 100%;
+  }
+  @media (max-width: 768px) {
+    section {
+      width: 100%;
+    }
   }
 </style>

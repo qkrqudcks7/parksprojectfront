@@ -93,6 +93,7 @@ export default {
     margin-top: 30px;
   }
   .study-form label {
+    font-weight: bold;
     margin-bottom: 5px;
   }
   .study-form label em {
@@ -125,11 +126,16 @@ export default {
     transition: 0.3s;
   }
   .btn {
+    width: 97.5%;
     border: 1px solid #555;
     background-color: white;
     padding: 7px 50px;
     display: block;
     margin: auto;
+  }
+  .btn:hover {
+    border: 1px solid skyblue;
+    box-shadow: 0 0 5px skyblue;
   }
   #file {
     border: 1px solid black;
@@ -150,7 +156,7 @@ export default {
       margin: 10px 0;
     }
     .btn {
-      width: 100%;
+      width: 95%;
     }
   }
 </style>

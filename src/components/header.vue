@@ -15,7 +15,7 @@
         <a @click="logout">로그아웃</a>
       </div>
       <div class="sns" v-else>
-        <a href="#">로그인</a>
+        <a href="/login">로그인</a>
         <a href="/signup">회원가입</a>
       </div>
     </nav>
