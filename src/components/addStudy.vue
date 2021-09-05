@@ -134,4 +134,23 @@ export default {
   #file {
     border: 1px solid black;
   }
+  @media (max-width: 768px) {
+    section {
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .study-header {
+      font-size: 20px;
+    }
+    .row {
+      flex-direction: column;
+    }
+    .row .field {
+      margin: 10px 0;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
 </style>
