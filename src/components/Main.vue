@@ -12,13 +12,13 @@
     <div class="item">
       <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
       <div class="desc">
-        <h6>Image Title</h6>
+        <h6>스터디 이름입니다.</h6>
         <div class="like">
           <span>
             <i class="fa fa-heart"></i> 300 Likes
           </span>
           <span>
-            <i class="fa fa-share-alt">박병찬</i>
+            <i class="fa fa-share-alt"></i> 박병찬
           </span>
         </div>
       </div>
@@ -93,14 +93,14 @@ export default {
     padding: 5px;
     background: url(../assets/search.png) no-repeat center right;
     background-size: 22px;
-    margin-right: 20px;
+    margin-right: 40px;
   }
   .search-box button {
     flex: 1;
     border: none;
     background-color: #0388fc;
     color: white;
-    padding: 15px 60px;
+    padding: 15px 30px;
     border-radius: 6px;
     font-size: 20px;
     box-shadow: 5px 5px 20px black;
