@@ -2,11 +2,11 @@
   <header>
     <nav>
       <div class="logo">
-        <a href="/">홈페이지</a>
+        <a href="/">My Study</a>
       </div>
       <ul class="gnb">
+        <li><a href="/allstudy">스터디 찾아보기</a></li>
         <li><a href="/addStudy">스터디 만들기</a></li>
-        <li><a href="#">Awards</a></li>
         <li><a href="#">LocaRegistrationtion</a></li>
         <li><a href="#">Contact</a></li>
       </ul>

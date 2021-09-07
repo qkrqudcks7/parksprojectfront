@@ -15,7 +15,7 @@
       </div>
       <div class="field">
         <label>방장</label>
-        <input type="text" v-model="this.$store.getters.user.name" readonly>
+        <input type="text" v-model="this.$store.state.initialState.user.name" readonly>
       </div>
     </div>
     <div class="row">

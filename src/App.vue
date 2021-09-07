@@ -14,9 +14,6 @@ export default {
   components: {
     appHeader
   },
-  created () {
-    this.getUserDetails()
-  },
   methods: {
     async getUserDetails () {
       try {
@@ -25,10 +22,8 @@ export default {
           return
         }
         const response = await this.axios.get('/user/info')
-        console.log(response)
         if (response.status === 200) {
           this.$store.commit('setUserDetail', response.data)
-          console.log('ok')
         }
       } catch (err) {
         notification.error(err, '사용자 정보를 불러올 수 없습니다.', () => {
@@ -42,6 +37,9 @@ export default {
       this.$store.commit('setUserDetail', null)
       this.$router.push('/')
     }
+  },
+  created () {
+    this.getUserDetails()
   }
 }
 </script>

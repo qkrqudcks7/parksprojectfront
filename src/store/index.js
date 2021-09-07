@@ -5,6 +5,9 @@ import {setHeader} from '../custom/axios.custom'
 
 Vue.use(Vuex)
 
+const user = JSON.parse(localStorage.getItem('user'))
+const initialState = user ? {state: {loggedIn: true}, user} : {state: {}, user: null}
+
 const initUser = (store) => {
   const {ACCESS_TOKEN} = localStorage
   if (ACCESS_TOKEN) {
@@ -15,6 +18,7 @@ const initUser = (store) => {
 export default new Vuex.Store({
   plugins: [initUser],
   state: {
+    initialState,
     authenticated: false,
     token: null,
     currentUser: null
@@ -37,6 +41,7 @@ export default new Vuex.Store({
       setHeader(accessToken)
     },
     setUserDetail (state, payload) {
+      localStorage.setItem('user', JSON.stringify(payload))
       state.currentUser = payload
       state.authenticated = payload !== null
     }
