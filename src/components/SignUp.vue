@@ -115,7 +115,7 @@ button {
   background-color: #3b5999;
 }
 .btn.naver {
-  background-color: #34eb49;
+  background-color: #03fc28;
 }
 .btn.google {
   background-color: #dd4b39;

@@ -11,44 +11,75 @@
     <div class="row">
       <div class="field">
         <label>제목<em>*</em></label>
-        <input type="text" placeholder="스터디의 제목을 입력해주세요." required>
+        <input type="text" v-model="studyRequest.title" placeholder="스터디의 제목을 입력해주세요." required>
       </div>
       <div class="field">
         <label>방장</label>
-        <input type="text" readonly>
+        <input type="text" v-model="this.$store.getters.user.name" readonly>
       </div>
     </div>
     <div class="row">
       <div class="field">
         <label>URL<em>*</em></label>
-        <input type="text" placeholder="공백없이 문자, 숫자, 대시(-)와 언더바(_)만으로 입력하세요." required>
+        <input type="text" v-model="studyRequest.path" placeholder="공백없이 문자, 숫자, 대시(-)와 언더바(_)만으로 입력하세요." required>
       </div>
       <div class="field">
-        <label>배경 이미지<em>*</em></label>
-        <input type="file" id="file">
+        <label for="img">배경 이미지<em>*</em></label>
+        <input type="file" id="img" ref="bgimg" @change="selectFile" accept="image/*" />
       </div>
     </div>
     <div class="row">
       <div class="field">
         <label>간단소개<em>*</em></label>
-        <textarea rows="2" placeholder="스터디 배너에 걸릴 간단한 소개를 입력해주세요."></textarea>
+        <textarea rows="2" v-model="studyRequest.shortDescription" placeholder="스터디 배너에 걸릴 간단한 소개를 입력해주세요."></textarea>
       </div>
     </div>
     <div class="row">
       <div class="field">
         <label>긴 소개<em>*</em></label>
-        <textarea rows="10" placeholder="스터디에 관한 상세내용을 입력해주세요."></textarea>
+        <textarea rows="10" v-model="studyRequest.longDescription" placeholder="스터디에 관한 상세내용을 입력해주세요."></textarea>
       </div>
     </div>
-    <button class="btn">만들기</button>
+    <button class="btn" @click="submitStudy">만들기</button>
   </div>
 </section>
 </body>
 </template>
 
 <script>
+import notification from '../custom/notification'
+
 export default {
-  name: 'addStudy'
+  name: 'addStudy',
+  data () {
+    return {
+      img: '',
+      studyRequest: {path: '', title: '', shortDescription: '', longDescription: ''}
+    }
+  },
+  methods: {
+    async submitStudy () {
+      try {
+        const formData = new FormData()
+        formData.append('path', this.studyRequest.path)
+        formData.append('title', this.studyRequest.path)
+        formData.append('shortDescription', this.studyRequest.path)
+        formData.append('longDescription', this.studyRequest.path)
+        formData.append('multipartFile', this.img)
+        const response = await this.axios.post('/study', formData)
+        if (response.status === 200) {
+          await this.$router.push('/')
+        }
+      } catch (err) {
+        notification.error(err, '올바른 정보를 입력해주세요', () => {
+          this.$router.push('/')
+        })
+      }
+    },
+    selectFile () {
+      this.img = this.$refs.bgimg.files[0]
+    }
+  }
 }
 </script>
 
@@ -137,7 +168,7 @@ export default {
     border: 1px solid skyblue;
     box-shadow: 0 0 5px skyblue;
   }
-  #file {
+  #img {
     border: 1px solid black;
   }
   @media (max-width: 768px) {
