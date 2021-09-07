@@ -24,6 +24,7 @@ export default {
         const response = await this.axios.get('/user/info')
         if (response.status === 200) {
           this.$store.commit('setUserDetail', response.data)
+          console.log('ok')
         }
       } catch (err) {
         notification.error(err, '사용자 정보를 불러올 수 없습니다.', () => {

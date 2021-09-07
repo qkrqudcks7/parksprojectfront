@@ -16,7 +16,22 @@
           <label>아이디</label>
           <input type="text" :value="this.$store.getters.user.email" disabled>
         </div>
+        <div class="third">
+          <label>지역</label>
+          <input type="text" v-model="InfoResponse.location">
+        </div>
+        <div class="third">
+          <label>직업</label>
+          <input type="text" v-model="InfoResponse.occupation">
+        </div>
+        <div class="third">
+          <label>한 줄 소개</label>
+          <input type="text" v-model="InfoResponse.bio">
+        </div>
       </div>
+    </div>
+    <div class="button">
+      <button class="btn" @click="info">내 정보 수정하기</button>
     </div>
   </section>
   </body>
@@ -24,7 +39,29 @@
 
 <script>
 export default {
-  name: 'profile'
+  name: 'profile',
+  data () {
+    return {
+      InfoResponse: {location: '', occupation: '', bio: ''}
+    }
+  },
+  methods: {
+    async info () {
+      console.log(this.InfoResponse)
+      const response = await this.axios.put('/user/info', this.InfoResponse)
+      if (response.status === 200) {
+        this.$router.go()
+      }
+    }
+  },
+  async mounted () {
+    const response = await this.axios.get('/user/info')
+    if (response.status === 200) {
+      this.InfoResponse.location = response.data.location
+      this.InfoResponse.occupation = response.data.occupation
+      this.InfoResponse.bio = response.data.bio
+    }
+  }
 }
 </script>
 
@@ -86,6 +123,21 @@ export default {
   }
   .columns img {
     width: 100%;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+  }
+  .button button {
+    border: 1px solid #555;
+    background-color: white;
+    padding: 7px 50px;
+    display: block;
+    margin: auto;
+  }
+  .button button:hover {
+    border: 1px solid skyblue;
+    box-shadow: 0 0 5px skyblue;
   }
   @media (max-width: 768px) {
     section {

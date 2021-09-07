@@ -11,9 +11,9 @@ export default {
     if (token) {
       this.$store.commit('setToken', token)
       this.$emit('getUserDetails')
-      this.$router.replace('/profile')
+      this.$router.push('/profile')
     } else {
-      this.$router.replace('/')
+      this.$router.push('/')
     }
   }
 }
