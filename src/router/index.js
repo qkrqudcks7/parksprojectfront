@@ -7,6 +7,8 @@ import Profile from '../components/profile'
 import AddStudy from '../components/addStudy'
 import Login from '../components/login'
 import store from '../store'
+import AllStudy from '../components/allStudy'
+import Study from '../components/study'
 
 Vue.use(Router)
 
@@ -50,6 +52,16 @@ export default new Router({
       name: 'AddStudy',
       component: AddStudy,
       beforeEnter: requireAuth()
+    },
+    {
+      path: '/allstudy',
+      name: 'AllStudy',
+      component: AllStudy
+    },
+    {
+      path: '/study',
+      name: 'Study',
+      component: Study
     }
   ]
 })

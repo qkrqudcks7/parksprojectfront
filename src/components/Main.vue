@@ -2,7 +2,7 @@
   <body>
   <section>
   <div class="name">
-    여러가지 <span>스터디</span>를 찾아보세요!
+    당신의 <span>스터디</span>를 만들고, 운영해보세요!
   </div>
   <div class="search-box">
     <input type="text" placeholder="Search">
