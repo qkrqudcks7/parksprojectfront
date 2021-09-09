@@ -10,6 +10,20 @@
   <div class="study-form">
     <div class="row">
       <div class="field">
+        <label>타입<em>*</em></label>
+        <select v-model="studyRequest.parentCategoryName" @click="getChildList(studyRequest.parentCategoryName)">
+          <option v-for="(i,index) in parent" :key="index" >{{ i.name }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>세부 타입<em>*</em></label>
+        <select v-model="studyRequest.categoryName">
+          <option v-for="(i,index) in child" :key="index+'aa'">{{ i.name }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
         <label>제목<em>*</em></label>
         <input type="text" v-model="studyRequest.title" placeholder="스터디의 제목을 입력해주세요." required>
       </div>
@@ -54,7 +68,9 @@ export default {
   data () {
     return {
       img: '',
-      studyRequest: {path: '', title: '', shortDescription: '', longDescription: ''}
+      studyRequest: {path: '', title: '', shortDescription: '', longDescription: ''},
+      child: [],
+      parent: []
     }
   },
   methods: {
@@ -62,13 +78,15 @@ export default {
       try {
         const formData = new FormData()
         formData.append('path', this.studyRequest.path)
-        formData.append('categoryName', '축구')
+        formData.append('categoryName', this.studyRequest.categoryName)
+        formData.append('parentCategoryName', this.studyRequest.parentCategoryName)
         formData.append('title', this.studyRequest.path)
         formData.append('shortDescription', this.studyRequest.path)
         formData.append('longDescription', this.studyRequest.path)
         formData.append('multipartFile', this.img)
         const response = await this.axios.post('/study', formData)
         if (response.status === 200) {
+          console.log('생성 되었습니다.')
           await this.$router.push('/')
         }
       } catch (err) {
@@ -79,7 +97,23 @@ export default {
     },
     selectFile () {
       this.img = this.$refs.bgimg.files[0]
+    },
+    getChildList (name) {
+      console.log(this.studyRequest.parentCategoryName)
+      this.axios.get(`/category/child/${name}`).then(response => {
+        if (response.status === 200) {
+          this.child = response.data
+          console.log(this.child)
+        }
+      })
     }
+  },
+  created () {
+    this.axios.get(`/category/parent`).then(response => {
+      if (response.status === 200) {
+        this.parent = response.data
+      }
+    })
   }
 }
 </script>
