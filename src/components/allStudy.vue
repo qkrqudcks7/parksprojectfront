@@ -10,7 +10,7 @@
     </div>
     <div class="items">
       <div class="item" v-for="(i,index) in study" :key='index'>
-        <div class="tag">공부</div>
+        <div class="tag">{{i.categorys[1]}} - {{i.categorys[0]}}</div>
         <img :src="i.image" alt="" @click="goStudy(i.id)">
         <div class="desc">
           <h6>{{i.title}}</h6>

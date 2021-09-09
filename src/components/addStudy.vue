@@ -62,6 +62,7 @@ export default {
       try {
         const formData = new FormData()
         formData.append('path', this.studyRequest.path)
+        formData.append('categoryName', '축구')
         formData.append('title', this.studyRequest.path)
         formData.append('shortDescription', this.studyRequest.path)
         formData.append('longDescription', this.studyRequest.path)
