@@ -8,6 +8,15 @@
       <input type="text" placeholder="Search">
       <button>검색</button>
     </div>
+    <div class="category-box">
+      <div class="child">스포츠</div>
+      <div class="child">dd</div>
+      <div class="child">dd</div>
+      <div class="child">dd</div>
+      <div class="child">dd</div>
+      <div class="child">dd</div>
+      <div class="child">dd</div>
+    </div>
     <div class="items">
       <div class="item" v-for="(i,index) in study" :key='index'>
         <div class="tag">{{i.categorys[1]}} - {{i.categorys[0]}}</div>
@@ -109,6 +118,21 @@ section {
   border-radius: 6px;
   font-size: 20px;
   box-shadow: 5px 5px 20px black;
+}
+.category-box {
+  display: flex;
+  justify-content: center;
+}
+.category-box .child {
+  flex: 1;
+  text-align: center;
+  margin-top: 30px;
+  margin-right: 10px;
+  border-radius: 6px;
+  border: 1px solid black;
+}
+.category-box .child:last-child {
+  margin-right: 0;
 }
 .items {
   display: flex;

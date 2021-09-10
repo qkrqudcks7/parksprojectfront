@@ -10,13 +10,13 @@
   <div class="study-form">
     <div class="row">
       <div class="field">
-        <label>타입<em>*</em></label>
+        <label>카테고리<em>*</em></label>
         <select v-model="studyRequest.parentCategoryName" @click="getChildList(studyRequest.parentCategoryName)">
           <option v-for="(i,index) in parent" :key="index" >{{ i.name }}</option>
         </select>
       </div>
       <div class="field">
-        <label>세부 타입<em>*</em></label>
+        <label>세부 카테고리<em>*</em></label>
         <select v-model="studyRequest.categoryName">
           <option v-for="(i,index) in child" :key="index+'aa'">{{ i.name }}</option>
         </select>
