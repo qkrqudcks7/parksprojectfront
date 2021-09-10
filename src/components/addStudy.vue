@@ -38,7 +38,7 @@
         <input type="text" v-model="studyRequest.path" placeholder="공백없이 문자, 숫자, 대시(-)와 언더바(_)만으로 입력하세요." required>
       </div>
       <div class="field">
-        <label for="img">배경 이미지<em>*</em></label>
+        <label for="img">배경 이미지</label>
         <input type="file" id="img" ref="bgimg" @change="selectFile" accept="image/*" />
       </div>
     </div>
@@ -53,6 +53,9 @@
         <label>긴 소개<em>*</em></label>
         <textarea rows="10" v-model="studyRequest.longDescription" placeholder="스터디에 관한 상세내용을 입력해주세요."></textarea>
       </div>
+    </div>
+    <div class="row">
+      <input type="text" id="onlyMarvel" autocomplete>
     </div>
     <button class="btn" @click="submitStudy">만들기</button>
   </div>
