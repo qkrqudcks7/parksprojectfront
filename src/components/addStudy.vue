@@ -34,6 +34,16 @@
     </div>
     <div class="row">
       <div class="field">
+        <label>지역<em>*</em></label>
+        <input type="text" v-model="studyRequest.location" placeholder="원하는 지역을 입력하세요" required>
+      </div>
+      <div class="field">
+        <label>인원수<em>*</em></label>
+        <input type="text" v-model="studyRequest.maxMember" placeholder="스터디 인원수를 입력하세요" readonly>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
         <label>URL<em>*</em></label>
         <input type="text" v-model="studyRequest.path" placeholder="공백없이 문자, 숫자, 대시(-)와 언더바(_)만으로 입력하세요." required>
       </div>
@@ -70,7 +80,7 @@ export default {
       editorConfig: {
       },
       img: '',
-      studyRequest: {path: '', title: '', shortDescription: '', longDescription: ''},
+      studyRequest: {path: '', title: '', shortDescription: '', longDescription: '', location: '', maxMember: 0},
       child: [],
       parent: []
     }
@@ -85,6 +95,8 @@ export default {
         formData.append('title', this.studyRequest.title)
         formData.append('shortDescription', this.studyRequest.shortDescription)
         formData.append('longDescription', this.studyRequest.longDescription)
+        formData.append('location', this.studyRequest.location)
+        formData.append('maxMember', this.studyRequest.maxMember)
         formData.append('multipartFile', this.img)
         const response = await this.axios.post('/study', formData)
         if (response.status === 200) {

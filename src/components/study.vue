@@ -23,14 +23,50 @@
           <input type="text" v-model="study.managers[0]" disabled>
         </div>
         <div class="third">
-          <label>짧은 소개</label>
-          <input type="text" v-model="study.shortDescription" disabled>
+          <label>지역</label>
+          <input type="text" v-model="study.location" disabled>
+        </div>
+        <div class="third">
+          <label>인원수</label>
+          <div>{{study.members.length}} / {{study.maxMember}} 명</div>
+<!--          <input type="text" v-model="study.maxMember" disabled>-->
         </div>
       </div>
     </div>
     <div class="row">
-      <label>긴 소개</label>
-      <ckeditor type="inline" v-model="study.longDescription" readOnly = true></ckeditor>
+      <label>짧은 소개</label>
+      <input type="text" v-model="study.shortDescription" disabled>
+    </div>
+    <div class="row">
+      <label>스터디 소개</label>
+      <div class="ckeditor">
+        <ckeditor type="inline" v-model="study.longDescription" readOnly></ckeditor>
+      </div>
+    </div>
+    <div class="row" v-if="!this.isAdMin">
+      <button @click="openModal">지원하기</button>
+    </div>
+    <!--  모달  -->
+    <div class="popup-wrap" v-if="modal">
+      <div class="popup">
+        <div class="popup-head">
+          <h1 class="head-title">가입 신청서</h1>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-titlebox">
+              <h5>간단한 신청 메세지를 작성해주세요!</h5>
+            </div>
+            <div class="body-contentbox">
+              <textarea name="" id="" cols="48" rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn confirm" id="confirm">확인</span>
+          <span class="pop-btn close" @click="modalClose">창 닫기</span>
+        </div>
+      </div>
     </div>
   </section>
   </body>
@@ -41,8 +77,10 @@ export default {
   name: 'study',
   data () {
     return {
-      study: {managers: [], managersId: []},
-      message: ''
+      study: {categorys: [], managers: [], managersId: [], members: []},
+      message: '',
+      isAdMin: false,
+      modal: false
     }
   },
   computed: {
@@ -50,13 +88,23 @@ export default {
       return this.$route.params.id
     }
   },
+  methods: {
+    openModal () {
+      this.modal = true
+    },
+    modalClose () {
+      this.modal = false
+    }
+  },
   created () {
     this.axios.get(`/onestudy/${this.studyId}`).then(response => {
       if (response.status === 200) {
         this.study = response.data
         console.log(this.study)
+        console.log(this.$store.state.initialState.user.id)
         if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
           this.message = '관리자가 입장하셨습니다.'
+          this.isAdMin = true
         }
       }
     })
@@ -115,6 +163,13 @@ section {
   justify-content: center;
   padding: 20px;
 }
+.row button {
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: crimson;
+  color: white;
+}
 .third {
   display: flex;
   margin-bottom: 20px;
@@ -125,13 +180,85 @@ section {
   text-align: center;
   font-weight: bold;
 }
+.third div {
+  flex: 3;
+  padding: 8px;
+}
 .third input {
   flex: 3;
 }
 .columns img {
   width: 100%;
 }
-
+.ckeditor {
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.popup-wrap {
+  background-color: rgba(0,0,0,.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+}
+.popup {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  background-color: #0388fc;
+  overflow: hidden;
+  box-shadow: 5px 10px 10px 1px rgba(0,0,0,.3);
+}
+.popup-head {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.popup-body {
+  width: 100%;
+  background-color:#ffffff;
+}
+.body-content {
+  width: 100%;
+  padding: 10px 20px;
+}
+.body-titlebox {
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+}
+.body-contentbox {
+  /* 단어가 잘리지 않음 */
+  word-break: break-word;
+  min-height: 100px;
+  max-height: 200px;
+}
+.popup-foot {
+  width: 100%;
+  height: 50px;
+}
+.pop-btn {
+  display: inline-flex;
+  width: 50%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  float: left;
+  cursor: pointer;
+  color: white;
+}
+.pop-btn.confirm {
+  border-right: 1px solid white;
+}
 @media (max-width: 768px) {
   section {
     width: 100%;
