@@ -1,7 +1,7 @@
 <template>
   <body>
   <section>
-    <div class="admin">{{message}}</div>
+    <div class="admin">{{adminMessage}}</div>
     <h1>{{study.title}}</h1>
     <b-nav tabs>
       <b-nav-item active>소개</b-nav-item>
@@ -46,6 +46,9 @@
     <div class="row" v-if="!this.isAdMin">
       <button @click="openModal">지원하기</button>
     </div>
+    <div class="row" v-if="this.already">
+      <button>이미 지원 했습니다</button>
+    </div>
     <!--  모달  -->
     <div class="popup-wrap" v-if="modal">
       <div class="popup">
@@ -58,12 +61,12 @@
               <h5>간단한 신청 메세지를 작성해주세요!</h5>
             </div>
             <div class="body-contentbox">
-              <textarea name="" id="" cols="48" rows="5"></textarea>
+              <textarea v-model="applyStudyRequest.message" cols="48" rows="5"></textarea>
             </div>
           </div>
         </div>
         <div class="popup-foot">
-          <span class="pop-btn confirm" id="confirm">확인</span>
+          <span class="pop-btn confirm" id="confirm" @click="apply">지원하기</span>
           <span class="pop-btn close" @click="modalClose">창 닫기</span>
         </div>
       </div>
@@ -78,9 +81,11 @@ export default {
   data () {
     return {
       study: {categorys: [], managers: [], managersId: [], members: []},
-      message: '',
+      adminMessage: '',
       isAdMin: false,
-      modal: false
+      modal: false,
+      applyStudyRequest: {message: ''},
+      already: false
     }
   },
   computed: {
@@ -94,17 +99,33 @@ export default {
     },
     modalClose () {
       this.modal = false
+    },
+    apply () {
+      this.axios.post(`/apply/${this.studyId}`, this.applyStudyRequest).then(response => {
+        if (response.status === 200) {
+          this.modal = false
+          console.log()
+        }
+      })
     }
   },
   created () {
     this.axios.get(`/onestudy/${this.studyId}`).then(response => {
       if (response.status === 200) {
         this.study = response.data
-        console.log(this.study)
-        console.log(this.$store.state.initialState.user.id)
         if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
-          this.message = '관리자가 입장하셨습니다.'
+          this.adminMessage = '관리자가 입장하셨습니다.'
           this.isAdMin = true
+        }
+      }
+    })
+    this.axios.get(`/apply/${this.studyId}`).then(response => {
+      if (response.status === 200) {
+        for (let i in response.data) {
+          if (response.data[i].userId === this.$store.state.initialState.user.id) {
+            this.isAdMin = true
+            this.already = true
+          }
         }
       }
     })
