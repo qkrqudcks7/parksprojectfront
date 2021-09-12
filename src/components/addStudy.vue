@@ -82,9 +82,9 @@ export default {
         formData.append('path', this.studyRequest.path)
         formData.append('categoryName', this.studyRequest.categoryName)
         formData.append('parentCategoryName', this.studyRequest.parentCategoryName)
-        formData.append('title', this.studyRequest.path)
-        formData.append('shortDescription', this.studyRequest.path)
-        formData.append('longDescription', this.studyRequest.path)
+        formData.append('title', this.studyRequest.title)
+        formData.append('shortDescription', this.studyRequest.shortDescription)
+        formData.append('longDescription', this.studyRequest.longDescription)
         formData.append('multipartFile', this.img)
         const response = await this.axios.post('/study', formData)
         if (response.status === 200) {
