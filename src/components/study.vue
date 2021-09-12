@@ -15,6 +15,10 @@
       </div>
       <div class="columns">
         <div class="third">
+          <label>카테고리</label>
+          <input type="text" v-model="study.categorys[0]" disabled>
+        </div>
+        <div class="third">
           <label>관리자</label>
           <input type="text" v-model="study.managers[0]" disabled>
         </div>
@@ -26,7 +30,7 @@
     </div>
     <div class="row">
       <label>긴 소개</label>
-      <textarea cols="30" rows="10" v-model="study.longDescription" disabled></textarea>
+      <ckeditor type="inline" v-model="study.longDescription" readOnly = true></ckeditor>
     </div>
   </section>
   </body>
@@ -37,7 +41,7 @@ export default {
   name: 'study',
   data () {
     return {
-      study: {managers: []},
+      study: {managers: [], managersId: []},
       message: ''
     }
   },
@@ -50,7 +54,8 @@ export default {
     this.axios.get(`/onestudy/${this.studyId}`).then(response => {
       if (response.status === 200) {
         this.study = response.data
-        if (this.study.managers[0] === this.$store.state.initialState.user.name) {
+        console.log(this.study)
+        if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
           this.message = '관리자가 입장하셨습니다.'
         }
       }

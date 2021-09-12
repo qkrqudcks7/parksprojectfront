@@ -51,11 +51,8 @@
     <div class="row">
       <div class="field">
         <label>긴 소개<em>*</em></label>
-        <textarea rows="10" v-model="studyRequest.longDescription" placeholder="스터디에 관한 상세내용을 입력해주세요."></textarea>
+        <ckeditor v-model="studyRequest.longDescription" :config="editorConfig"></ckeditor>
       </div>
-    </div>
-    <div class="row">
-      <input type="text" id="onlyMarvel" autocomplete>
     </div>
     <button class="btn" @click="submitStudy">만들기</button>
   </div>
@@ -70,6 +67,8 @@ export default {
   name: 'addStudy',
   data () {
     return {
+      editorConfig: {
+      },
       img: '',
       studyRequest: {path: '', title: '', shortDescription: '', longDescription: ''},
       child: [],

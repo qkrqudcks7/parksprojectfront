@@ -9,13 +9,7 @@
       <button>검색</button>
     </div>
     <div class="category-box">
-      <div class="child">스포츠</div>
-      <div class="child">dd</div>
-      <div class="child">dd</div>
-      <div class="child">dd</div>
-      <div class="child">dd</div>
-      <div class="child">dd</div>
-      <div class="child">dd</div>
+      <div class="child" v-for="(i,index) in parent" :key="index">{{i.name}}</div>
     </div>
     <div class="items">
       <div class="item" v-for="(i,index) in study" :key='index' @click="goStudy(i.id)">
@@ -43,7 +37,8 @@ export default {
   name: 'allStudy',
   data () {
     return {
-      study: []
+      study: [],
+      parent: []
     }
   },
   methods: {
@@ -59,6 +54,12 @@ export default {
   },
   mounted () {
     this.findAll()
+
+    this.axios.get(`/category/parent`).then(response => {
+      if (response.status === 200) {
+        this.parent = response.data
+      }
+    })
   }
 }
 </script>
