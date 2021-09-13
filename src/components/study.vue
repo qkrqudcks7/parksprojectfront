@@ -6,8 +6,8 @@
     <b-nav tabs>
       <b-nav-item active>소개</b-nav-item>
       <b-nav-item>멤버</b-nav-item>
-      <b-nav-item>Another Link</b-nav-item>
-      <b-nav-item disabled>Disabled</b-nav-item>
+      <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
+      <b-nav-item v-if="isAdMin" @click="applyState">가입 현황</b-nav-item>
     </b-nav>
     <div class="row">
       <div class="columns">
@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="row" v-if="!this.isAdMin">
-      <button @click="openModal">지원하기</button>
+      <button @click="openModal" ref='apply'>지원하기</button>
     </div>
     <div class="row" v-if="this.already">
       <button>이미 지원 했습니다</button>
@@ -85,7 +85,8 @@ export default {
       isAdMin: false,
       modal: false,
       applyStudyRequest: {message: ''},
-      already: false
+      already: false,
+      applyPeople: []
     }
   },
   computed: {
@@ -95,6 +96,9 @@ export default {
   },
   methods: {
     openModal () {
+      if (this.$store.state.initialState.user === null) {
+        this.$router.push('/login')
+      }
       this.modal = true
     },
     modalClose () {
@@ -104,9 +108,12 @@ export default {
       this.axios.post(`/apply/${this.studyId}`, this.applyStudyRequest).then(response => {
         if (response.status === 200) {
           this.modal = false
-          console.log()
+          this.$router.go()
         }
       })
+    },
+    applyState () {
+      this.$router.push({name: 'ApplyState', params: {applyPeople: this.applyPeople, study: this.study}})
     }
   },
   created () {
@@ -119,16 +126,21 @@ export default {
         }
       }
     })
-    this.axios.get(`/apply/${this.studyId}`).then(response => {
-      if (response.status === 200) {
-        for (let i in response.data) {
-          if (response.data[i].userId === this.$store.state.initialState.user.id) {
-            this.isAdMin = true
-            this.already = true
+    if (this.$store.state.initialState.user !== null) {
+      this.axios.get(`/apply/${this.studyId}`).then(response => {
+        if (response.status === 200) {
+          this.applyPeople = response.data
+          console.log(this.applyPeople)
+          for (let i in response.data) {
+            if (response.data[i].userId === this.$store.state.initialState.user.id) {
+              console.log('통과')
+              this.already = true
+              this.$refs.apply.hidden = true
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
 }
 </script>

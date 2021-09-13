@@ -9,6 +9,7 @@ import Login from '../components/login'
 import store from '../store'
 import AllStudy from '../components/allStudy'
 import Study from '../components/study'
+import ApplyState from '../components/applyState'
 
 Vue.use(Router)
 
@@ -62,6 +63,12 @@ export default new Router({
       path: '/study',
       name: 'Study',
       component: Study
+    },
+    {
+      path: '/applyState',
+      name: 'ApplyState',
+      component: ApplyState,
+      beforeEnter: requireAuth()
     }
   ]
 })
