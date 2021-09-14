@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import notification from '../custom/notification'
+
 export default {
   name: 'study',
   data () {
@@ -104,13 +106,22 @@ export default {
     modalClose () {
       this.modal = false
     },
-    apply () {
-      this.axios.post(`/apply/${this.studyId}`, this.applyStudyRequest).then(response => {
-        if (response.status === 200) {
+    async apply () {
+      try {
+        const result = await this.axios.post(`/apply/${this.studyId}`, this.applyStudyRequest)
+        notification.success(result, '신청 성공', () => {
           this.modal = false
           this.$router.push('/profile')
-        }
-      })
+        })
+      } catch (error) {
+        this.$notify({
+          group: 'noti',
+          type: 'error',
+          duration: 6000,
+          title: '신청 실패',
+          text: '신청상 오류가 생겼습니다.'
+        })
+      }
     },
     applyState () {
       this.$router.push({name: 'ApplyState', params: {study: this.study}})

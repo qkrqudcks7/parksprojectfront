@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import notification from '../custom/notification'
+
 export default {
   name: 'applyState',
   data () {
@@ -72,20 +74,40 @@ export default {
       this.$router.push({name: 'Study', params: {id: id}})
     },
     approval (id) {
-      this.axios.post(`/addapply/${id}`).then(response => {
-        if (response.status === 200) {
+      try {
+        const result = this.axios.post(`/addapply/${id}`)
+        notification.success(result, '승인하였습니다.', () => {
           console.log('승인')
           this.reload()
-        }
-      })
+          this.studies()
+        })
+      } catch (error) {
+        this.$notify({
+          group: 'noti',
+          type: 'error',
+          duration: 6000,
+          title: '승인 실패',
+          text: '승인에 오류가 생겼습니다.'
+        })
+      }
     },
     refuse (id) {
-      this.axios.delete(`/apply/${id}`).then(response => {
-        if (response.status === 200) {
-          console.log('거절')
+      try {
+        const result = this.axios.delete(`/apply/${id}`)
+        notification.success(result, '거절하였습니다.', () => {
+          console.log('승인')
           this.reload()
-        }
-      })
+          this.studies()
+        })
+      } catch (error) {
+        this.$notify({
+          group: 'noti',
+          type: 'error',
+          duration: 6000,
+          title: '거절 실패',
+          text: '거절에 오류가 생겼습니다.'
+        })
+      }
     },
     reload () {
       this.axios.get(`/apply/${this.study.id}`).then(response => {
