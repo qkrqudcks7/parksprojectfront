@@ -108,12 +108,12 @@ export default {
       this.axios.post(`/apply/${this.studyId}`, this.applyStudyRequest).then(response => {
         if (response.status === 200) {
           this.modal = false
-          this.$router.go()
+          this.$router.push('/profile')
         }
       })
     },
     applyState () {
-      this.$router.push({name: 'ApplyState', params: {applyPeople: this.applyPeople, study: this.study}})
+      this.$router.push({name: 'ApplyState', params: {study: this.study}})
     }
   },
   created () {

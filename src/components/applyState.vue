@@ -43,8 +43,8 @@
           <div class="message">{{i.message ? i.message : '메세지가 없습니다'}}</div>
         </div>
         <div class="column">
-          <button>승인</button>
-          <button>거절</button>
+          <button @click="approval(i.id)">승인</button>
+          <button @click="refuse(i.id)">거절</button>
         </div>
       </div>
     </div>
@@ -66,21 +66,49 @@ export default {
   methods: {
     studies () {
       this.study = this.$route.params.study
-    },
-    people () {
-      this.applyPeople = this.$route.params.applyPeople
+      console.log(this.study)
     },
     goStudy (id) {
       this.$router.push({name: 'Study', params: {id: id}})
+    },
+    approval (id) {
+      this.axios.post(`/addapply/${id}`).then(response => {
+        if (response.status === 200) {
+          console.log('승인')
+          this.reload()
+        }
+      })
+    },
+    refuse (id) {
+      this.axios.delete(`/apply/${id}`).then(response => {
+        if (response.status === 200) {
+          console.log('거절')
+          this.reload()
+        }
+      })
+    },
+    reload () {
+      this.axios.get(`/apply/${this.study.id}`).then(response => {
+        if (response.status === 200) {
+          let data = []
+          for (let i in response.data) {
+            if (response.data[i].applyState === 'WAITING') {
+              data.push(response.data[i])
+            }
+          }
+          this.applyPeople = data
+          console.log(this.applyPeople)
+        }
+      })
     }
   },
   async mounted () {
     await this.studies()
-    await this.people()
     if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
       this.adminMessage = '관리자가 입장하셨습니다.'
       this.isAdMin = true
     }
+    await this.reload()
   }
 }
 </script>
