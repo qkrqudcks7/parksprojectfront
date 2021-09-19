@@ -7,7 +7,7 @@
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
       <b-nav-item active>멤버</b-nav-item>
       <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
-      <b-nav-item v-if="isAdMin" @click="applyState">가입 현황</b-nav-item>
+      <b-nav-item v-if="isAdMin" @click="applyState(study.id)">가입 현황</b-nav-item>
     </b-nav>
     <div class="row">
       <div class="columns">
@@ -58,13 +58,14 @@ export default {
       isAdMin: false
     }
   },
+  computed: {
+    studyId () {
+      return this.$route.params.id
+    }
+  },
   methods: {
-    studies () {
-      this.study = this.$route.params.study
-      console.log(this.study)
-    },
-    applyState () {
-      this.$router.push({name: 'ApplyState', params: {study: this.study}})
+    applyState (id) {
+      this.$router.push({name: 'ApplyState', params: {id: id}})
     },
     goStudy (id) {
       this.$router.push({name: 'Study', params: {id: id}})
@@ -73,7 +74,7 @@ export default {
       this.axios.post(`/addapply/${id}`).then(response => {
         if (response.status === 200) {
           console.log('승인')
-          this.reload()
+          this.$router.go()
         }
       })
     },
@@ -81,12 +82,12 @@ export default {
       this.axios.delete(`/apply/${id}`).then(response => {
         if (response.status === 200) {
           console.log('거절')
-          this.reload()
+          this.$router.go()
         }
       })
     },
     reload () {
-      this.axios.get(`/apply/${this.study.id}`).then(response => {
+      this.axios.get(`/apply/${this.studyId}`).then(response => {
         if (response.status === 200) {
           let data = []
           for (let i in response.data) {
@@ -100,12 +101,17 @@ export default {
       })
     }
   },
-  async mounted () {
-    await this.studies()
-    if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
-      this.adminMessage = '관리자가 입장하셨습니다.'
-      this.isAdMin = true
-    }
+  async created () {
+    this.axios.get(`/onestudy/${this.studyId}`).then(response => {
+      if (response.status === 200) {
+        this.study = response.data
+        console.log(this.study)
+        if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
+          this.adminMessage = '관리자가 입장하셨습니다.'
+          this.isAdMin = true
+        }
+      }
+    })
     await this.reload()
   }
 }

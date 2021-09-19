@@ -61,18 +61,18 @@ export default new Router({
       component: AllStudy
     },
     {
-      path: '/study',
+      path: '/study:id',
       name: 'Study',
       component: Study
     },
     {
-      path: '/applyState',
+      path: '/applyState:id',
       name: 'ApplyState',
       component: ApplyState,
       beforeEnter: requireAuth()
     },
     {
-      path: '/studymembers',
+      path: '/studymembers:id',
       name: 'StudyMembers',
       component: StudyMembers,
       beforeEnter: requireAuth()

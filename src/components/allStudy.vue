@@ -50,7 +50,7 @@ export default {
       }
     },
     goStudy (id) {
-      this.$router.replace({name: 'Study', params: {id: id}})
+      this.$router.push({name: 'Study', params: {id: id}})
     }
   },
   mounted () {

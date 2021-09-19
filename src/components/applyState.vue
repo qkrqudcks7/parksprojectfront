@@ -5,7 +5,7 @@
     <h1>{{study.title}}</h1>
     <b-nav tabs>
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
-      <b-nav-item @click="goMember()">멤버</b-nav-item>
+      <b-nav-item @click="goMember(study.id)">멤버</b-nav-item>
       <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
       <b-nav-item v-if="isAdMin" active>가입 현황</b-nav-item>
     </b-nav>
@@ -65,23 +65,24 @@ export default {
       isAdMin: false
     }
   },
+  computed: {
+    studyId () {
+      return this.$route.params.id
+    }
+  },
   methods: {
-    studies () {
-      this.study = this.$route.params.study
-      console.log(this.study)
-    },
     goStudy (id) {
-      this.$router.replace({name: 'Study', params: {id: id}})
+      this.$router.push({name: 'Study', params: {id: id}})
     },
-    goMember () {
-      this.$router.replace({name: 'StudyMembers', params: {study: this.study}})
+    goMember (id) {
+      this.$router.push({name: 'StudyMembers', params: {id: id}})
     },
     approval (id) {
       try {
         const result = this.axios.post(`/addapply/${id}`)
         notification.success(result, '승인하였습니다.', () => {
           console.log('승인')
-          this.$router.replace({name: 'ApplyState', params: {study: this.study}})
+          this.$router.push({name: 'ApplyState', params: {study: this.study}})
         })
       } catch (error) {
         this.$notify({
@@ -98,7 +99,7 @@ export default {
         const result = this.axios.delete(`/apply/${id}`)
         notification.success(result, '거절하였습니다.', () => {
           console.log('승인')
-          this.$router.replace({name: 'ApplyState', params: {study: this.study}})
+          this.$router.push({name: 'ApplyState', params: {study: this.study}})
         })
       } catch (error) {
         this.$notify({
@@ -111,7 +112,7 @@ export default {
       }
     },
     reload () {
-      this.axios.get(`/apply/${this.study.id}`).then(response => {
+      this.axios.get(`/apply/${this.studyId}`).then(response => {
         if (response.status === 200) {
           let data = []
           for (let i in response.data) {
@@ -125,12 +126,17 @@ export default {
       })
     }
   },
-  async mounted () {
-    await this.studies()
-    if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
-      this.adminMessage = '관리자가 입장하셨습니다.'
-      this.isAdMin = true
-    }
+  async created () {
+    this.axios.get(`/onestudy/${this.studyId}`).then(response => {
+      if (response.status === 200) {
+        this.study = response.data
+        console.log(this.study)
+        if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
+          this.adminMessage = '관리자가 입장하셨습니다.'
+          this.isAdMin = true
+        }
+      }
+    })
     await this.reload()
   }
 }

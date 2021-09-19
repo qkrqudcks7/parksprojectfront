@@ -44,11 +44,18 @@
         <ckeditor type="inline" v-model="study.longDescription" readOnly></ckeditor>
       </div>
     </div>
-    <div class="row" v-if="!this.isAdMin">
-      <button @click="openModal" ref='apply'>지원하기</button>
+    <div v-if="isNotFull">
+      <div class="row" v-if="!this.isAdMin">
+        <button @click="openModal" ref='apply'>지원하기</button>
+      </div>
+      <div class="row" v-if="this.already">
+        <button>이미 지원 했습니다</button>
+      </div>
     </div>
-    <div class="row" v-if="this.already">
-      <button>이미 지원 했습니다</button>
+    <div v-else>
+      <div class="row" v-if="this.already">
+        <button>인원이 마감되었습니다</button>
+      </div>
     </div>
     <!--  모달  -->
     <div class="popup-wrap" v-if="modal">
@@ -90,7 +97,8 @@ export default {
       applyStudyRequest: {message: ''},
       already: false,
       applyPeople: [],
-      alreadyMessage: ''
+      alreadyMessage: '',
+      isNotFull: true
     }
   },
   computed: {
@@ -100,11 +108,11 @@ export default {
   },
   methods: {
     goMember () {
-      this.$router.replace({name: 'StudyMembers', params: {study: this.study}})
+      this.$router.push({name: 'StudyMembers', params: {id: this.studyId}})
     },
     openModal () {
       if (this.$store.state.initialState.user === null) {
-        this.$router.replace('/login')
+        this.$router.push('/login')
       }
       this.modal = true
     },
@@ -129,17 +137,19 @@ export default {
       }
     },
     applyState () {
-      this.$router.replace({name: 'ApplyState', params: {study: this.study}})
+      this.$router.push({name: 'ApplyState', params: {id: this.studyId}})
     }
   },
   created () {
     this.axios.get(`/onestudy/${this.studyId}`).then(response => {
       if (response.status === 200) {
         this.study = response.data
+        console.log(this.study)
         if (this.study.managersId[0] === this.$store.state.initialState.user.id) {
           this.adminMessage = '관리자가 입장하셨습니다.'
           this.isAdMin = true
         }
+        this.isNotFull = this.study.members.length < this.study.maxMember
       }
     })
     if (this.$store.state.initialState.user !== null) {

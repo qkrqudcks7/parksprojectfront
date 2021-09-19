@@ -36,11 +36,9 @@
     <div class="row">
       <h3>가입된 스터디</h3>
       <div class="study">
-        <div class="item" v-for="(i,index) in study" :key='index' @click="goStudy(i.id)">
-          <div class="third">
-            <img :src="i.image" alt="">
-            <label>{{i.title}}</label>
-          </div>
+        <div class="item" v-for="(i,index) in study" :key='index'>
+          <img :src="i.image" alt="" @click="goStudy(i.id)">
+          <label>{{i.title}}</label>
         </div>
       </div>
     </div>
@@ -162,8 +160,20 @@ export default {
   }
   .item {
     display: flex;
-    width: 150px;
+    flex-direction: column;
+    margin: 20px;
+  }
+  .item img {
+    border-radius: 8px;
+    width: 200px;
     height: 150px;
+    cursor: pointer;
+  }
+  .item img:hover {
+    opacity: 0.5;
+  }
+  .item label {
+    margin-top: 10px;
   }
   .third {
     display: flex;
