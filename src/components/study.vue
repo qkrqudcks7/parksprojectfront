@@ -2,10 +2,11 @@
   <body>
   <section>
     <div class="admin">{{adminMessage}}</div>
+    <div class="admin">{{alreadyMessage}}</div>
     <h1>{{study.title}}</h1>
     <b-nav tabs>
       <b-nav-item active>소개</b-nav-item>
-      <b-nav-item>멤버</b-nav-item>
+      <b-nav-item @click="goMember">멤버</b-nav-item>
       <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
       <b-nav-item v-if="isAdMin" @click="applyState">가입 현황</b-nav-item>
     </b-nav>
@@ -88,7 +89,8 @@ export default {
       modal: false,
       applyStudyRequest: {message: ''},
       already: false,
-      applyPeople: []
+      applyPeople: [],
+      alreadyMessage: ''
     }
   },
   computed: {
@@ -97,9 +99,12 @@ export default {
     }
   },
   methods: {
+    goMember () {
+      this.$router.replace({name: 'StudyMembers', params: {study: this.study}})
+    },
     openModal () {
       if (this.$store.state.initialState.user === null) {
-        this.$router.push('/login')
+        this.$router.replace('/login')
       }
       this.modal = true
     },
@@ -111,7 +116,7 @@ export default {
         const result = await this.axios.post(`/apply/${this.studyId}`, this.applyStudyRequest)
         notification.success(result, '신청 성공', () => {
           this.modal = false
-          this.$router.push('/profile')
+          this.$router.push('/allstudy')
         })
       } catch (error) {
         this.$notify({
@@ -124,7 +129,7 @@ export default {
       }
     },
     applyState () {
-      this.$router.push({name: 'ApplyState', params: {study: this.study}})
+      this.$router.replace({name: 'ApplyState', params: {study: this.study}})
     }
   },
   created () {
@@ -142,11 +147,15 @@ export default {
         if (response.status === 200) {
           this.applyPeople = response.data
           console.log(this.applyPeople)
+          console.log(this.$store.state.initialState.user.id)
           for (let i in response.data) {
             if (response.data[i].userId === this.$store.state.initialState.user.id) {
               console.log('통과')
               this.already = true
               this.$refs.apply.hidden = true
+            }
+            if (response.data[i].userId === this.$store.state.initialState.user.id && response.data[i].applyState === 'ACCEPTED') {
+              this.alreadyMessage = '가입된 스터디입니다!'
             }
           }
         }

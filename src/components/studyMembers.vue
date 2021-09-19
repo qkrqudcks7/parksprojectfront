@@ -5,9 +5,9 @@
     <h1>{{study.title}}</h1>
     <b-nav tabs>
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
-      <b-nav-item @click="goMember()">멤버</b-nav-item>
+      <b-nav-item active>멤버</b-nav-item>
       <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
-      <b-nav-item v-if="isAdMin" active>가입 현황</b-nav-item>
+      <b-nav-item v-if="isAdMin" @click="applyState">가입 현황</b-nav-item>
     </b-nav>
     <div class="row">
       <div class="columns">
@@ -33,18 +33,13 @@
       </div>
     </div>
     <div class="row" style="border: 1px solid black">
-      <label>스터디 신청 인원</label>
+      <label>방장 - {{study.managers[0]}}</label>
+      <label>스터디 멤버</label>
       <div v-for="(i, index) in applyPeople" :key="index" class="people">
         <div class="column">
           <div class="name">{{i.userName}}</div>
           <div class="state">{{i.applyState}}</div>
-        </div>
-        <div class="column">
-          <div class="message">{{i.message ? i.message : '메세지가 없습니다'}}</div>
-        </div>
-        <div class="column">
-          <button @click="approval(i.id)">승인</button>
-          <button @click="refuse(i.id)">거절</button>
+          <div>일반</div>
         </div>
       </div>
     </div>
@@ -53,10 +48,8 @@
 </template>
 
 <script>
-import notification from '../custom/notification'
-
 export default {
-  name: 'applyState',
+  name: 'studyMembers',
   data () {
     return {
       study: {categorys: [], managers: [], managersId: [], members: []},
@@ -70,52 +63,34 @@ export default {
       this.study = this.$route.params.study
       console.log(this.study)
     },
-    goStudy (id) {
-      this.$router.replace({name: 'Study', params: {id: id}})
+    applyState () {
+      this.$router.push({name: 'ApplyState', params: {study: this.study}})
     },
-    goMember () {
-      this.$router.replace({name: 'StudyMembers', params: {study: this.study}})
+    goStudy (id) {
+      this.$router.push({name: 'Study', params: {id: id}})
     },
     approval (id) {
-      try {
-        const result = this.axios.post(`/addapply/${id}`)
-        notification.success(result, '승인하였습니다.', () => {
+      this.axios.post(`/addapply/${id}`).then(response => {
+        if (response.status === 200) {
           console.log('승인')
-          this.$router.replace({name: 'ApplyState', params: {study: this.study}})
-        })
-      } catch (error) {
-        this.$notify({
-          group: 'noti',
-          type: 'error',
-          duration: 6000,
-          title: '승인 실패',
-          text: '승인에 오류가 생겼습니다.'
-        })
-      }
+          this.reload()
+        }
+      })
     },
     refuse (id) {
-      try {
-        const result = this.axios.delete(`/apply/${id}`)
-        notification.success(result, '거절하였습니다.', () => {
-          console.log('승인')
-          this.$router.replace({name: 'ApplyState', params: {study: this.study}})
-        })
-      } catch (error) {
-        this.$notify({
-          group: 'noti',
-          type: 'error',
-          duration: 6000,
-          title: '거절 실패',
-          text: '거절에 오류가 생겼습니다.'
-        })
-      }
+      this.axios.delete(`/apply/${id}`).then(response => {
+        if (response.status === 200) {
+          console.log('거절')
+          this.reload()
+        }
+      })
     },
     reload () {
       this.axios.get(`/apply/${this.study.id}`).then(response => {
         if (response.status === 200) {
           let data = []
           for (let i in response.data) {
-            if (response.data[i].applyState === 'WAITING') {
+            if (response.data[i].applyState === 'ACCEPTED') {
               data.push(response.data[i])
             }
           }

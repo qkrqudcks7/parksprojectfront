@@ -49,12 +49,11 @@ export default {
       }
     },
     goStudy (id) {
-      this.$router.push({name: 'Study', params: {id: id}})
+      this.$router.replace({name: 'Study', params: {id: id}})
     }
   },
   mounted () {
     this.findAll()
-
     this.axios.get(`/category/parent`).then(response => {
       if (response.status === 200) {
         this.parent = response.data
@@ -142,15 +141,17 @@ section {
   margin-top: 60px;
 }
 .item {
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   width: 310px;
   height: 300px;
   overflow: hidden;
   position: relative;
 }
 .item .tag {
+  border: 1px solid black;
+  border-radius: 8px;
+  margin-bottom: 10px;
   padding: 10px;
-  color: #dd4b39;
   font-weight: bold;
   font-size: 28px;
 }

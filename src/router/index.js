@@ -10,6 +10,7 @@ import store from '../store'
 import AllStudy from '../components/allStudy'
 import Study from '../components/study'
 import ApplyState from '../components/applyState'
+import StudyMembers from '../components/studyMembers'
 
 Vue.use(Router)
 
@@ -68,6 +69,12 @@ export default new Router({
       path: '/applyState',
       name: 'ApplyState',
       component: ApplyState,
+      beforeEnter: requireAuth()
+    },
+    {
+      path: '/studymembers',
+      name: 'StudyMembers',
+      component: StudyMembers,
       beforeEnter: requireAuth()
     }
   ]
