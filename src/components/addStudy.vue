@@ -39,7 +39,7 @@
       </div>
       <div class="field">
         <label>인원수<em>*</em></label>
-        <input type="text" v-model="studyRequest.maxMember" placeholder="스터디 인원수를 입력하세요" readonly>
+        <input type="text" v-model="studyRequest.maxMember" placeholder="스터디 인원수를 입력하세요">
       </div>
     </div>
     <div class="row">

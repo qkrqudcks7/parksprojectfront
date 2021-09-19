@@ -13,8 +13,8 @@
     </div>
     <div class="items">
       <div class="item" v-for="(i,index) in study" :key='index' @click="goStudy(i.id)">
-        <div class="tag">{{i.categorys[1]}} - {{i.categorys[0]}}</div>
-        <img :src="i.image" alt="">
+        <div class="tag">{{i.categorys[1]}} - {{i.categorys[0]}} {{i.members.length}}/{{i.maxMember}}명</div>
+        <img :src="i.image" alt="" >
         <div class="desc">
           <h6>{{i.title}}</h6>
           <div class="like">
@@ -46,6 +46,7 @@ export default {
       const response = await this.axios.get('/allstudy')
       if (response.status === 200) {
         this.study = response.data
+        console.log(response.data)
       }
     },
     goStudy (id) {
@@ -148,6 +149,7 @@ section {
   position: relative;
 }
 .item .tag {
+  text-align: center;
   border: 1px solid black;
   border-radius: 8px;
   margin-bottom: 10px;
