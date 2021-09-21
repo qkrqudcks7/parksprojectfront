@@ -77,6 +77,9 @@ export default {
     goMember (id) {
       this.$router.push({name: 'StudyMembers', params: {id: id}})
     },
+    modify () {
+      this.$router.push({name: 'ModifyStudy', params: {id: this.studyId}})
+    },
     approval (id) {
       try {
         const result = this.axios.post(`/addapply/${id}`)

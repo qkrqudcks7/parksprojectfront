@@ -6,7 +6,7 @@
     <b-nav tabs>
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
       <b-nav-item active>멤버</b-nav-item>
-      <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
+      <b-nav-item v-if="isAdMin" @click="modify">설정하기</b-nav-item>
       <b-nav-item v-if="isAdMin" @click="applyState(study.id)">가입 현황</b-nav-item>
     </b-nav>
     <div class="row">
@@ -69,6 +69,9 @@ export default {
     },
     goStudy (id) {
       this.$router.push({name: 'Study', params: {id: id}})
+    },
+    modify () {
+      this.$router.push({name: 'ModifyStudy', params: {id: this.studyId}})
     },
     approval (id) {
       this.axios.post(`/addapply/${id}`).then(response => {

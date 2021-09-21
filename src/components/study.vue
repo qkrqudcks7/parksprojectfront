@@ -7,7 +7,7 @@
     <b-nav tabs>
       <b-nav-item active>소개</b-nav-item>
       <b-nav-item @click="goMember">멤버</b-nav-item>
-      <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
+      <b-nav-item v-if="isAdMin" @click="modify">설정하기</b-nav-item>
       <b-nav-item v-if="isAdMin" @click="applyState">가입 현황</b-nav-item>
     </b-nav>
     <div class="row">
@@ -138,6 +138,9 @@ export default {
     },
     applyState () {
       this.$router.push({name: 'ApplyState', params: {id: this.studyId}})
+    },
+    modify () {
+      this.$router.push({name: 'ModifyStudy', params: {id: this.studyId}})
     }
   },
   created () {
