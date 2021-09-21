@@ -36,7 +36,7 @@
     <div class="row">
       <h3>가입된 스터디</h3>
       <div class="study">
-        <div class="item" v-for="(i,index) in study" :key='index'>
+        <div class="item" v-for="(i,index) in acceptedStudy" :key='index'>
           <img :src="i.image" alt="" @click="goStudy(i.id)">
           <label>{{i.title}}</label>
         </div>
@@ -45,9 +45,9 @@
     <div class="row">
       <h3>가입 신청 대기 스터디</h3>
       <div class="study">
-        <div class="third">
-          <label>스터디</label>
-          <input type="text" disabled>
+        <div class="item" v-for="(i,index) in waitingStudy" :key='index'>
+          <img :src="i.image" alt="" @click="goStudy(i.id)">
+          <label>{{i.title}}</label>
         </div>
       </div>
     </div>
@@ -88,8 +88,13 @@ export default {
 
     const result = await this.axios.get(`/user/study`)
     if (result.status === 200) {
-      this.study = result.data
-      console.log(this.study)
+      for (let i in result.data) {
+        if (result.data[i].state === 'ACCEPTED') {
+          this.acceptedStudy.push(result.data[i])
+        } else if (result.data[i].state === 'WAITING') {
+          this.waitingStudy.push(result.data[i])
+        }
+      }
     }
   }
 }
