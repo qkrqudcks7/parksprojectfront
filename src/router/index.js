@@ -11,6 +11,7 @@ import AllStudy from '../components/allStudy'
 import Study from '../components/study'
 import ApplyState from '../components/applyState'
 import StudyMembers from '../components/studyMembers'
+import ModifyStudy from '../components/modifyStudy'
 
 Vue.use(Router)
 
@@ -75,6 +76,12 @@ export default new Router({
       path: '/studymembers:id',
       name: 'StudyMembers',
       component: StudyMembers,
+      beforeEnter: requireAuth()
+    },
+    {
+      path: '/modifyStudy:id',
+      name: 'ModifyStudy',
+      component: ModifyStudy,
       beforeEnter: requireAuth()
     }
   ]
