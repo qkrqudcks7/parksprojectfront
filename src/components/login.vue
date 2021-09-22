@@ -43,7 +43,7 @@ export default {
         notification.success(response, '로그인 성공', () => {
           this.$store.commit('setToken', response.data.accessToken)
           this.$emit('getUserDetails')
-          this.$router.push('/profile')
+          this.$router.push('/')
         })
       } catch (err) {
         this.$notify({

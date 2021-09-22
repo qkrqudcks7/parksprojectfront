@@ -2,7 +2,7 @@
   <body>
   <section>
     <div class="admin">{{adminMessage}}</div>
-    <h1>{{study.title}}</h1>
+    <h1><input class="input" type="text" v-model="study.title"></h1>
     <b-nav tabs>
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
       <b-nav-item @click="goMember(study.id)">멤버</b-nav-item>
@@ -33,8 +33,8 @@
         <div class="third">
           <label>스터디 상태</label>
           <div class="radio">
-            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" value="true">활성화</b-form-radio>
-            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" value="false">비활성화</b-form-radio>
+            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" value="true">&nbsp;&nbsp;활성화</b-form-radio>
+            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" value="false">&nbsp;&nbsp;비활성화</b-form-radio>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="row">
-      <button>수정하기</button>
+      <button @click="modify">수정하기</button>
     </div>
   </section>
   </body>
@@ -84,6 +84,9 @@ export default {
     },
     applyState () {
       this.$router.push({name: 'ApplyState', params: {id: this.studyId}})
+    },
+    modify () {
+
     }
   },
   created () {
@@ -118,7 +121,7 @@ h1,h2,h3,h4,h5,h6 {
   margin: 0;
   font-weight: normal;
 }
-h1 {
+h1{
   text-align: center;
   margin: 30px;
 }
