@@ -33,8 +33,8 @@
         <div class="third">
           <label>스터디 상태</label>
           <div class="radio">
-            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" value="true">&nbsp;&nbsp;활성화</b-form-radio>
-            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" value="false">&nbsp;&nbsp;비활성화</b-form-radio>
+            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" :value="true">&nbsp;&nbsp;활성화</b-form-radio>
+            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">&nbsp;&nbsp;비활성화</b-form-radio>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-// import notification from '../custom/notification'
+import notification from '../custom/notification'
 
 export default {
   name: 'modifyStudy',
@@ -85,8 +85,21 @@ export default {
     applyState () {
       this.$router.push({name: 'ApplyState', params: {id: this.studyId}})
     },
-    modify () {
-
+    async modify () {
+      try {
+        const result = await this.axios.put(`/study/${this.studyId}`, this.study)
+        notification.success(result, '수정 성공', () => {
+          this.$router.push({name: 'Study', params: {id: this.studyId}})
+        })
+      } catch (error) {
+        this.$notify({
+          group: 'noti',
+          type: 'error',
+          duration: 6000,
+          title: '수정 실패',
+          text: '변경상 오류가 생겼습니다.'
+        })
+      }
     }
   },
   created () {

@@ -6,7 +6,7 @@
     <b-nav tabs>
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
       <b-nav-item @click="goMember(study.id)">멤버</b-nav-item>
-      <b-nav-item v-if="isAdMin">설정하기</b-nav-item>
+      <b-nav-item v-if="isAdMin" @click="modify">설정하기</b-nav-item>
       <b-nav-item v-if="isAdMin" active>가입 현황</b-nav-item>
     </b-nav>
     <div class="row">
