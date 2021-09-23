@@ -33,8 +33,8 @@
         <div class="third">
           <label>스터디 상태</label>
           <div class="radio">
-            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" :value="true">&nbsp;&nbsp;활성화</b-form-radio>
-            <b-form-radio v-model="study.published" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">&nbsp;&nbsp;비활성화</b-form-radio>
+            <b-form-radio v-model="study.published" name="some-radios" :value="true">&nbsp;&nbsp;활성화</b-form-radio>
+            <b-form-radio v-model="study.published" name="some-radios" :value="false">&nbsp;&nbsp;비활성화</b-form-radio>
           </div>
         </div>
       </div>
@@ -51,6 +51,7 @@
     </div>
     <div class="row">
       <button @click="modify">수정하기</button>
+      <button class="delete" @click="deleteStudy">삭제하기</button>
     </div>
   </section>
   </body>
@@ -99,6 +100,25 @@ export default {
           title: '수정 실패',
           text: '변경상 오류가 생겼습니다.'
         })
+      }
+    },
+    async deleteStudy () {
+      if (confirm('정말 삭제하시겠습니까??') === true) {
+        try {
+          const result = await this.axios.delete(`/study/${this.studyId}`)
+          notification.success(result, '삭제 성공', () => {
+            this.$router.push({name: 'AllStudy'})
+          })
+        } catch (error) {
+          this.$notify({
+            group: 'noti',
+            type: 'error',
+            duration: 6000,
+            title: '수정 실패',
+            text: '변경상 오류가 생겼습니다.'
+          })
+        }
+      } else {
       }
     }
   },
@@ -179,8 +199,12 @@ section {
   padding: 20px;
   border: none;
   border-radius: 8px;
-  background-color: crimson;
+  background-color: #74b9ff;
+  margin: 10px 0px;
   color: white;
+}
+.row .delete {
+  background-color: crimson;
 }
 .third {
   display: flex;
