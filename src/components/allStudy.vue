@@ -5,11 +5,15 @@
       여러가지 <span>스터디</span>를 찾아보세요!
     </div>
     <div class="search-box">
-      <input type="text" placeholder="Search">
-      <button>검색</button>
+      <input type="text" placeholder="Search" v-model="word" @keyup.enter="search">
+      <button @click="search">검색</button>
     </div>
     <div class="category-box">
-      <div class="child" v-for="(i,index) in parent" :key="index">{{i.name}}</div>
+      <div class="child"><div class="nameSearch" @click="findAll">전체</div></div>
+      <div class="child" v-for="(i,index) in parent" :key="index"><div class="nameSearch" @click="searchForName(i.name)">{{i.name}}</div></div>
+    </div>
+    <div class="noResult" v-if="study.length === 0">
+      검색결과가 없습니다.
     </div>
     <div class="items">
       <div class="item" v-for="(i,index) in study" :key='index' @click="goStudy(i.id)">
@@ -37,6 +41,7 @@ export default {
   name: 'allStudy',
   data () {
     return {
+      word: '',
       study: [],
       parent: []
     }
@@ -51,6 +56,20 @@ export default {
     },
     goStudy (id) {
       this.$router.push({name: 'Study', params: {id: id}})
+    },
+    search () {
+      this.axios.get(`/searchstudy/${this.word}`).then(response => {
+        if (response.status === 200) {
+          this.study = response.data
+        }
+      })
+    },
+    searchForName (name) {
+      this.axios.get(`/studybycategory/${name}`).then(response => {
+        if (response.status === 200) {
+          this.study = response.data
+        }
+      })
     }
   },
   mounted () {
@@ -110,6 +129,13 @@ section {
   background-size: 22px;
   margin-right: 40px;
 }
+.noResult {
+  margin: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+}
 .search-box button {
   flex: 1;
   border: none;
@@ -123,6 +149,10 @@ section {
 .category-box {
   display: flex;
   justify-content: center;
+}
+.nameSearch:hover {
+  cursor: pointer;
+  background-color: #74b9ff;
 }
 .category-box .child {
   flex: 1;
