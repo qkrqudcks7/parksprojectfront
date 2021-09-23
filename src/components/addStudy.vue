@@ -208,10 +208,11 @@ export default {
   .btn {
     width: 97.5%;
     border: 1px solid #555;
-    background-color: white;
+    background-color:  #74b9ff;
+    color: white;
     padding: 7px 50px;
     display: block;
-    margin: auto;
+    margin: auto auto 20px;
   }
   .btn:hover {
     border: 1px solid skyblue;
