@@ -99,10 +99,10 @@ export default {
         formData.append('maxMember', this.studyRequest.maxMember)
         formData.append('multipartFile', this.img)
         const response = await this.axios.post('/study', formData)
-        if (response.status === 200) {
-          console.log('생성 되었습니다.')
-          await this.$router.push('/')
-        }
+        notification.success(response, '생성되었습니다.', () => {
+          console.log('승인')
+          this.$router.push('/')
+        })
       } catch (err) {
         notification.error(err, '올바른 정보를 입력해주세요', () => {
           this.$router.push('/')

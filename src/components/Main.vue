@@ -5,38 +5,23 @@
     당신의 <span>스터디</span>를 만들고, 운영해보세요!
   </div>
   <div class="search-box">
-    <input type="text" placeholder="Search">
-    <button>검색</button>
+    <input type="text" placeholder="Search" v-model="word" @keyup.enter="search">
+    <button @click="search">검색</button>
   </div>
   <div class="items">
-    <div class="item">
-      <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
+    <div class="item" v-for="(i,index) in study" :key='index' @click="goStudy(i.id)">
+      <img :src="i.image" alt="">
       <div class="desc">
-        <h6>스터디 이름입니다.</h6>
+        <h6>{{i.title}}</h6>
         <div class="like">
           <span>
-            <i class="fa fa-heart"></i> 300 Likes
+            <i class="fa fa-heart"></i> {{i.shortDescription}}
           </span>
           <span>
-            <i class="fa fa-share-alt"></i> 박병찬
+            <i class="fa fa-share-alt"></i> {{i.managers[0]}}
           </span>
         </div>
       </div>
-    </div>
-    <div class="item">
-      <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
-    </div>
-    <div class="item">
-      <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
-    </div>
-    <div class="item">
-      <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
-    </div>
-    <div class="item">
-      <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
-    </div>
-    <div class="item">
-      <img src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQ6R5CH9H9gw_SRX3VHNKFCsOOV94-CURGSkahLuod6_SfOC7ZCwZ5dZTacQ5Se" alt="">
     </div>
   </div>
   </section>
@@ -45,7 +30,39 @@
 
 <script>
 export default {
-  name: 'Main'
+  name: 'Main',
+  data () {
+    return {
+      word: '',
+      study: []
+    }
+  },
+  methods: {
+    goStudy (id) {
+      this.$router.push({name: 'Study', params: {id: id}})
+    },
+    search () {
+      this.axios.get(`/searchstudy/${this.word}`).then(response => {
+        if (response.status === 200) {
+          this.study = response.data
+        }
+      })
+    },
+    searchForName (name) {
+      this.axios.get(`/studybycategory/${name}`).then(response => {
+        if (response.status === 200) {
+          this.study = response.data
+        }
+      })
+    }
+  },
+  async mounted () {
+    const response = await this.axios.get('/sixstudy')
+    if (response.status === 200) {
+      this.study = response.data
+      console.log(response.data)
+    }
+  }
 }
 </script>
 
