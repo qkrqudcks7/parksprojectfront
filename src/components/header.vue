@@ -8,7 +8,8 @@
         <li><a href="/allstudy">스터디 찾아보기</a></li>
         <li><a href="/addStudy">스터디 만들기</a></li>
         <li><a href="/mystudy">내가 만든 스터디</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="/alarm"><b-icon icon="bell-fill"></b-icon> 알림</a></li>
+<!--   todo     <b-icon icon="bell-fill" variant="warning"></b-icon>-->
       </ul>
       <div class="sns" v-if="this.$store.getters.authenticated">
         <a href="/profile">프로필</a>
