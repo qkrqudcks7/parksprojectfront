@@ -10,12 +10,26 @@
           <div class="record">
             <div class="temp" v-for="(i,index) in alarm" :key="index">
               <div class="state"><b-icon icon="bell-fill" variant="warning"></b-icon> {{studyCheck(i.notificationType)}}</div>
-              <div class="title">제목: {{i.title}}</div>
+              <div class="title">{{i.title}}</div>
             </div>
           </div>
         </div>
         <div class="two">
-          dd
+          <div class="name"><span><b-icon icon="bell-fill" variant="warning"></b-icon> 전체 알림 조회</span></div>
+          <div class="record">
+            <div class="temp" v-for="(i,index) in alarm" :key="index" @click="checkAlarm(i.id)">
+              <div class="tempOne">
+                <div class="state"><b-icon icon="bell-fill" variant="warning"></b-icon> {{studyCheck(i.notificationType)}}</div>
+                <div class="title">제목: {{i.title}}</div>
+                <div class="messagwe">소개: {{i.message}}</div>
+              </div>
+              <div class="tempTwo">
+                <div class="time">{{i.localDateTime}}</div>
+                <div>&nbsp;</div>
+                <div class="check">{{checked(i.checked)}}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -39,6 +53,16 @@ export default {
       } else if (type === 'STUDY_DELETE') {
         return '스터디 삭제'
       }
+    },
+    checked (check) {
+      if (check === false) {
+        return '알림 미확인'
+      } else {
+        return '알림 확인'
+      }
+    },
+    checkAlarm (id) {
+      // todo
     }
   },
   mounted () {
@@ -93,7 +117,6 @@ small {
 }
 .two {
   flex: 3;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   margin: 15px;
@@ -108,6 +131,9 @@ small {
 .name p {
   font-size: 24px;
 }
+.two .name span {
+  font-size: 24px;
+}
 .record {
   display: flex;
   flex-direction: column;
@@ -117,8 +143,11 @@ small {
   border: 1px solid black;
   border-radius: 8px;
   margin-bottom: 5px;
-  /*background-color: #66ff33;*/
   cursor: pointer;
+}
+.two .temp {
+  display: flex;
+  justify-content: space-between;
 }
 .temp:hover {
   border: 1px solid crimson;
