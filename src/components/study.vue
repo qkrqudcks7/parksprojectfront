@@ -53,7 +53,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="row" v-if="this.already">
+      <div class="row">
         <button>인원이 마감되었습니다</button>
       </div>
     </div>
