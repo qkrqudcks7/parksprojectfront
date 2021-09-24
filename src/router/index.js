@@ -13,6 +13,7 @@ import ApplyState from '../components/applyState'
 import StudyMembers from '../components/studyMembers'
 import ModifyStudy from '../components/modifyStudy'
 import MyStudy from '../components/myStudy'
+import Alarm from '../components/alarm'
 
 Vue.use(Router)
 
@@ -89,6 +90,12 @@ export default new Router({
       path: '/mystudy',
       name: 'MyStudy',
       component: MyStudy,
+      beforeEnter: requireAuth()
+    },
+    {
+      path: '/alarm',
+      name: 'Alarm',
+      component: Alarm,
       beforeEnter: requireAuth()
     }
   ]
