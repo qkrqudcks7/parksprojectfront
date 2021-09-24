@@ -125,7 +125,6 @@ h3 .red {
   padding: 20px;
 }
 .two {
-  border: 1px solid black;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -160,5 +159,19 @@ h3 .red {
 .desc h6 {
   font-size: 12px;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 20px;
+  }
+  section {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .item {
+    width: 100%;
+  }
 }
 </style>
