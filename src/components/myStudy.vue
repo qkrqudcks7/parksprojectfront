@@ -8,38 +8,61 @@
             <h3><span class="green">활성화</span> 스터디</h3>
           </div>
           <div class="two">
-            <div class="item">
-              <div class="tag"></div>
-              <img src="../assets/end.png" alt="">
+            <div class="item" v-for="(i,index) in study" :key="index">
+              <img :src="i.image" alt="" @click="goStudy(i.id)">
               <div class="desc">
-                <h6>dd</h6>
+                <h6>{{i.title}}</h6>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="one">
-            <h3><span class="red">비활성화</span> 스터디</h3>
+            <h3><span class="red">마감된</span> 스터디</h3>
           </div>
           <div class="two">
-            <div class="item">
-              <div class="tag"></div>
-              <img src="../assets/end.png" alt="">
+            <div class="item" v-for="(i,index) in finished" :key="index">
+              <img :src="i.image" alt="" @click="goStudy(i.id)">
               <div class="desc">
-                <h6>dd</h6>
+                <h6>{{i.title}}</h6>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </section>
   </body>
 </template>
 
 <script>
 export default {
-  name: 'myStudy'
+  name: 'myStudy',
+  data () {
+    return {
+      study: [],
+      finished: []
+    }
+  },
+  methods: {
+    goStudy (id) {
+      this.$router.push({name: 'Study', params: {id: id}})
+    }
+  },
+  mounted () {
+    this.axios.get(`/user/mystudy`).then(response => {
+      if (response.status === 200) {
+        for (let i in response.data) {
+          if (response.data[i].maxMember === response.data[i].members.length) {
+            this.finished.push(response.data[i])
+          } else {
+            this.study.push(response.data[i])
+          }
+        }
+      }
+    })
+    console.log(this.study)
+    console.log(this.finished)
+  }
 }
 </script>
 
@@ -135,7 +158,7 @@ h3 .red {
   transition: 0.3s;
 }
 .desc h6 {
-  font-size: 15px;
+  font-size: 12px;
   text-align: center;
 }
 </style>
