@@ -2,7 +2,8 @@
   <body>
   <section>
     <div class="admin">{{adminMessage}}</div>
-    <h1><input class="input" type="text" v-model="study.title"></h1>
+    <h1><input class="input" type="text" v-model="study.title" name="title" v-validate="'required'"></h1>
+    <div class="alert alert-danger" role="alert" v-if="errors.has('title')">제목을 입력해주세요!</div>
     <b-nav tabs>
       <b-nav-item @click="goStudy(study.id)">소개</b-nav-item>
       <b-nav-item @click="goMember(study.id)">멤버</b-nav-item>
@@ -24,8 +25,9 @@
         </div>
         <div class="third">
           <label>지역</label>
-          <input type="text" v-model="study.location">
+          <input type="text" v-model="study.location" v-validate="'required'" name="location">
         </div>
+        <div class="alert alert-danger" role="alert" v-if="errors.has('location')">위치를 입력해주세요!</div>
         <div class="third">
           <label>인원수</label>
           <div>{{study.members.length}} / {{study.maxMember}} 명</div>
@@ -41,7 +43,8 @@
     </div>
     <div class="row">
       <label>짧은 소개</label>
-      <input type="text" v-model="study.shortDescription">
+      <input type="text" v-model="study.shortDescription" name="short">
+      <div class="alert alert-danger" role="alert" v-if="errors.has('short')">짧은 소개를 입력해주세요!</div>
     </div>
     <div class="row">
       <label>스터디 소개</label>
@@ -87,6 +90,11 @@ export default {
       this.$router.push({name: 'ApplyState', params: {id: this.studyId}})
     },
     async modify () {
+      await this.$validator.validateAll()
+      if (this.errors.any()) {
+        console.log('에러')
+        return
+      }
       try {
         const result = await this.axios.put(`/study/${this.studyId}`, this.study)
         notification.success(result, '수정 성공', () => {

@@ -18,7 +18,7 @@
     <div class="items">
       <div class="item" v-for="(i,index) in study" :key='index'>
         <div class="tag">{{i.categorys[1]}} - {{i.categorys[0]}} {{i.members.length}}/{{i.maxMember}}명</div>
-        <img v-if="i.members.length === i.maxMember" src="/src/assets/end.png" alt="">
+        <img v-if="i.members.length === i.maxMember" src="../assets/end.png" alt="">
         <img v-else :src="i.image" alt="" @click="goStudy(i.id)">
         <div class="desc">
           <h6>{{i.title}}</h6>

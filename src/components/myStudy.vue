@@ -1,5 +1,9 @@
 <template>
-  <div>내 스터디 페이지 만들어야 함</div>
+  <div>내 스터디 페이지 만들어야 함
+    <div>
+      <img src="../assets/end.png" alt="">
+    </div>
+  </div>
 </template>
 
 <script>

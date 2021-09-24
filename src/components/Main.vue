@@ -9,8 +9,9 @@
     <button @click="search">검색</button>
   </div>
   <div class="items">
-    <div class="item" v-for="(i,index) in study" :key='index' @click="goStudy(i.id)">
-      <img :src="i.image" alt="">
+    <div class="item" v-for="(i,index) in study" :key='index'>
+      <img v-if="i.members.length === i.maxMember" src="../assets/end.png" alt="">
+      <img v-else :src="i.image" alt="" @click="goStudy(i.id)">
       <div class="desc">
         <h6>{{i.title}}</h6>
         <div class="like">
