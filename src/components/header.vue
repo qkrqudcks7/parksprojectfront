@@ -7,7 +7,7 @@
       <ul class="gnb">
         <li><a href="/allstudy">스터디 찾아보기</a></li>
         <li><a href="/addStudy">스터디 만들기</a></li>
-        <li><a href="#">LocaRegistrationtion</a></li>
+        <li><a href="/mystudy">내가 만든 스터디</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
       <div class="sns" v-if="this.$store.getters.authenticated">

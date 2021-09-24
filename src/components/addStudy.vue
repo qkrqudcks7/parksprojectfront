@@ -11,21 +11,24 @@
     <div class="row">
       <div class="field">
         <label>카테고리<em>*</em></label>
-        <select v-model="studyRequest.parentCategoryName" @click="getChildList(studyRequest.parentCategoryName)">
+        <select v-model="studyRequest.parentCategoryName" @click="getChildList(studyRequest.parentCategoryName)" v-validate="'required'" name="parentCategory">
           <option v-for="(i,index) in parent" :key="index" >{{ i.name }}</option>
         </select>
+        <div class="alert alert-danger" role="alert" v-if="errors.has('parentCategory')">카테고리를 선택해주세요!</div>
       </div>
       <div class="field">
         <label>세부 카테고리<em>*</em></label>
-        <select v-model="studyRequest.categoryName">
+        <select v-model="studyRequest.categoryName" v-validate="'required'" name="childCategory">
           <option v-for="(i,index) in child" :key="index+'aa'">{{ i.name }}</option>
         </select>
+        <div class="alert alert-danger" role="alert" v-if="errors.has('childCategory')">카테고리를 선택해주세요!</div>
       </div>
     </div>
     <div class="row">
       <div class="field">
         <label>제목<em>*</em></label>
-        <input type="text" v-model="studyRequest.title" placeholder="스터디의 제목을 입력해주세요." required>
+        <input type="text" name="title" v-model="studyRequest.title" placeholder="스터디의 제목을 입력해주세요." v-validate="'required'">
+        <div class="alert alert-danger" role="alert" v-if="errors.has('title')">제목을 입력해주세요!</div>
       </div>
       <div class="field">
         <label>방장</label>
@@ -35,17 +38,20 @@
     <div class="row">
       <div class="field">
         <label>지역<em>*</em></label>
-        <input type="text" v-model="studyRequest.location" placeholder="원하는 지역을 입력하세요" required>
+        <input type="text" v-model="studyRequest.location" placeholder="원하는 지역을 입력하세요" v-validate="'required'" name="location">
+        <div class="alert alert-danger" role="alert" v-if="errors.has('location')">지역을 입력해주세요!</div>
       </div>
       <div class="field">
         <label>인원수<em>*</em></label>
-        <input type="text" v-model="studyRequest.maxMember" placeholder="스터디 인원수를 입력하세요">
+        <input type="text" v-model="studyRequest.maxMember" placeholder="스터디 인원수를 입력하세요" v-validate="'required'" name="maxMember">
+        <div class="alert alert-danger" role="alert" v-if="errors.has('maxMember')">인원수를 입력하세요!</div>
       </div>
     </div>
     <div class="row">
       <div class="field">
         <label>URL<em>*</em></label>
-        <input type="text" v-model="studyRequest.path" placeholder="공백없이 문자, 숫자, 대시(-)와 언더바(_)만으로 입력하세요." required>
+        <input type="text" v-model="studyRequest.path" placeholder="공백없이 문자, 숫자, 대시(-)와 언더바(_)만으로 입력하세요." v-validate="'required'" name="url">
+        <div class="alert alert-danger" role="alert" v-if="errors.has('url')">고유의 스터디 주소를 입력하세요!</div>
       </div>
       <div class="field">
         <label for="img">배경 이미지</label>
@@ -55,13 +61,14 @@
     <div class="row">
       <div class="field">
         <label>간단소개<em>*</em></label>
-        <textarea rows="2" v-model="studyRequest.shortDescription" placeholder="스터디 배너에 걸릴 간단한 소개를 입력해주세요."></textarea>
+        <textarea rows="2" v-model="studyRequest.shortDescription" placeholder="스터디 배너에 걸릴 간단한 소개를 입력해주세요." v-validate="'required'" name="short"></textarea>
+        <div class="alert alert-danger" role="alert" v-if="errors.has('short')">간단한 소개를 입력하세요!</div>
       </div>
     </div>
     <div class="row">
       <div class="field">
         <label>긴 소개<em>*</em></label>
-        <ckeditor v-model="studyRequest.longDescription" :config="editorConfig"></ckeditor>
+        <ckeditor v-model="studyRequest.longDescription" :config="editorConfig" v-validate="'required'"></ckeditor>
       </div>
     </div>
     <button class="btn" @click="submitStudy">만들기</button>
@@ -87,6 +94,11 @@ export default {
   },
   methods: {
     async submitStudy () {
+      await this.$validator.validateAll()
+      if (this.errors.any()) {
+        console.log('에러')
+        return
+      }
       try {
         const formData = new FormData()
         formData.append('path', this.studyRequest.path)
@@ -188,6 +200,9 @@ export default {
     flex-direction: column;
     flex: 1;
     margin-bottom: 30px;
+  }
+  .row .field input, .row .field select {
+    margin-bottom: 5px;
   }
   .row .field input:hover,
   .row .field textarea:hover {

@@ -7,6 +7,7 @@ import axios from './custom/axios.custom'
 import Notification from 'vue-notification'
 import CKEditor from 'ckeditor4-vue'
 import store from './store'
+import VeeValidate from 'vee-validate'
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -14,6 +15,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(CKEditor)
+Vue.use(VeeValidate)
 Vue.use(Notification)
 Vue.prototype.axios = axios
 Vue.config.productionTip = false
