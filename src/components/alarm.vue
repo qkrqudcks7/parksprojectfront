@@ -8,8 +8,8 @@
           <div class="name"><p>알림 기록</p><b-icon icon="bell-fill" variant="warning"></b-icon>
             <small>알림을 <span style="color: crimson">클릭</span>하여 해제</small></div>
           <div class="record">
-            <div class="temp" v-for="(i,index) in alarm" :key="index">
-              <div class="state"><b-icon icon="bell-fill" variant="warning"></b-icon> {{studyCheck(i.notificationType)}}</div>
+            <div class="temp" v-for="(i,index) in alarm" :key="index" @click="checkAlarm(i.id)">
+              <div class="state"><span v-if="i.checked === false"><b-icon icon="bell-fill" variant="warning"/></span><span v-else><b-icon icon="bell-fill" /></span> {{studyCheck(i.notificationType)}}</div>
               <div class="title">{{i.title}}</div>
             </div>
           </div>
@@ -17,9 +17,9 @@
         <div class="two">
           <div class="name"><span><b-icon icon="bell-fill" variant="warning"></b-icon> 전체 알림 조회</span></div>
           <div class="record">
-            <div class="temp" v-for="(i,index) in alarm" :key="index" @click="checkAlarm(i.id)">
+            <div class="temp" v-for="(i,index) in alarm" :key="index">
               <div class="tempOne">
-                <div class="state"><b-icon icon="bell-fill" variant="warning"></b-icon> {{studyCheck(i.notificationType)}}</div>
+                <div class="state"><span v-if="i.checked === false"><b-icon icon="bell-fill" variant="warning"/></span><span v-else><b-icon icon="bell-fill" /></span> {{studyCheck(i.notificationType)}}</div>
                 <div class="title">제목: {{i.title}}</div>
                 <div class="messagwe">소개: {{i.message}}</div>
               </div>
@@ -62,13 +62,14 @@ export default {
       }
     },
     checkAlarm (id) {
-      // todo
+      this.axios.put(`/notification/${id}`).then(() => {
+        this.$router.go()
+      })
     }
   },
   mounted () {
     this.axios.get(`/notification`).then(response => {
       this.alarm = response.data
-      console.log(this.alarm)
     })
   }
 }
@@ -143,15 +144,15 @@ small {
   border: 1px solid black;
   border-radius: 8px;
   margin-bottom: 5px;
-  cursor: pointer;
 }
 .two .temp {
   display: flex;
   justify-content: space-between;
 }
-.temp:hover {
+.one .temp:hover {
   border: 1px solid crimson;
   box-shadow: 0 0 5px crimson;
+  cursor: pointer;
 }
 .temp .state {
   font-size: 20px;
@@ -159,5 +160,20 @@ small {
 }
 .temp .title {
   font-size: 15px;
+}
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 20px;
+  }
+  section {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .one , .two {
+    width: 100%;
+  }
+ /* todo */
 }
 </style>
