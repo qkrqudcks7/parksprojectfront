@@ -2,7 +2,8 @@
   <body>
     <section>
       <h2>알림</h2>
-      <small>스터디를 생성, 수정, 삭제를 하면 알림을 받을 수 있습니다.</small>
+      <small>스터디를 생성, 수정, 삭제를 하면 알림을 받을 수 있습니다.</small><br>
+      <small>미확인 알람은 <b-icon icon="bell-fill" variant="warning"/>, 확인 알람은 <b-icon icon="bell-fill"/></small>
       <div class="alarm">
         <div class="one">
           <div class="name"><p>알림 기록</p><b-icon icon="bell-fill" variant="warning"></b-icon>

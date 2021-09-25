@@ -8,8 +8,7 @@
         <li><a href="/allstudy">스터디 찾아보기</a></li>
         <li><a href="/addStudy">스터디 만들기</a></li>
         <li><a href="/mystudy">내가 만든 스터디</a></li>
-        <li><a href="/alarm"><b-icon icon="bell-fill"></b-icon> 알림</a></li>
-<!--   todo     <b-icon icon="bell-fill" variant="warning"></b-icon>-->
+        <li><a href="/alarm"><b-icon v-if="this.alarmCheck" icon="bell-fill"/> <b-icon v-else icon="bell-fill" variant="warning"/> 알림</a></li>
       </ul>
       <div class="sns" v-if="this.$store.getters.authenticated">
         <a href="/profile">프로필</a>
@@ -27,13 +26,26 @@ export default {
   name: 'hheader',
   data () {
     return {
-      ready: false
+      ready: false,
+      alarmCheck: false
     }
   },
   methods: {
     logout () {
       this.$emit('logout')
     }
+  },
+  mounted () {
+    this.axios.get(`/notification`).then(response => {
+      for (let i in response.data) {
+        if (response.data[i].checked === false) {
+          this.alarmCheck = false
+          break
+        } else {
+          this.alarmCheck = true
+        }
+      }
+    })
   }
 }
 </script>
