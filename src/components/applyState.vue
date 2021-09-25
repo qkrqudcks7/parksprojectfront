@@ -84,8 +84,7 @@ export default {
       try {
         const result = this.axios.post(`/addapply/${id}`)
         notification.success(result, '승인하였습니다.', () => {
-          console.log('승인')
-          this.$router.push({name: 'StudyMembers', params: {id: this.studyId}})
+          this.$router.go()
         })
       } catch (error) {
         this.$notify({
@@ -101,8 +100,7 @@ export default {
       try {
         const result = this.axios.delete(`/apply/${id}`)
         notification.success(result, '거절하였습니다.', () => {
-          console.log('승인')
-          this.$router.push({name: 'StudyMembers', params: {id: this.studyId}})
+          this.$router.go()
         })
       } catch (error) {
         this.$notify({
