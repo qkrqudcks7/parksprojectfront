@@ -68,7 +68,6 @@ export default {
     this.axios.get(`/chatroom/message/${this.roomId}`).then(response => {
       if (response.status === 200) {
         this.msg = response.data
-        console.log(this.msg)
       }
     })
     let socket = new SockJS('http://localhost:8080/ws')
@@ -77,6 +76,7 @@ export default {
       console.log('success', frame)
       this.stompClient.subscribe(`/sub/${this.roomId}`, response => {
         let jsonBody = JSON.parse(response.body)
+        console.log(jsonBody)
         let m = {
           'content': jsonBody.content,
           'name': jsonBody.name,
@@ -94,7 +94,6 @@ export default {
 <style scoped>
 .myMsg{
   text-align: right;
-  color : gray;
 }
 .otherMsg{
   text-align: left;
