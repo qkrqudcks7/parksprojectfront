@@ -43,6 +43,13 @@
         </div>
       </div>
     </div>
+    <div class="row" style="border: 1px solid black">
+      <label>스터디 단톡방</label>
+      <div v-for="(i,index) in room" :key="index">
+        <label>{{i.title}}</label>
+        <button @click="goRoom(i.id)">바로가기</button>
+      </div>
+    </div>
   </section>
   </body>
 </template>
@@ -55,7 +62,9 @@ export default {
       study: {categorys: [], managers: [], managersId: [], members: []},
       applyPeople: [],
       adminMessage: '',
-      isAdMin: false
+      isAdMin: false,
+      room: [],
+      roomCheck: false
     }
   },
   computed: {
@@ -102,9 +111,30 @@ export default {
           console.log(this.applyPeople)
         }
       })
+    },
+    goRoom (id) {
+      for (let i in this.applyPeople) {
+        if (this.$store.getters.user.id === this.applyPeople[i].userId) {
+          this.roomCheck = true
+          break
+        }
+      }
+      if (this.isAdMin) {
+        this.roomCheck = true
+      }
+      if (this.roomCheck) {
+        this.$router.push({name: 'Chatroom', params: {id: id}})
+      } else {
+        alert('멤버가 아니면 입장할 수 없습니다.')
+      }
     }
   },
   async created () {
+    this.axios.get(`/chatroomlist/${this.studyId}`).then(response => {
+      if (response.status === 200) {
+        this.room = response.data
+      }
+    })
     this.axios.get(`/onestudy/${this.studyId}`).then(response => {
       if (response.status === 200) {
         this.study = response.data
@@ -153,7 +183,7 @@ section {
 }
 .row {
   display: flex;
-  margin-top: 30px;
+  margin: 30px 0px;
 }
 .row label {
   margin-bottom: 10px;

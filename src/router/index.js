@@ -101,7 +101,7 @@ export default new Router({
       beforeEnter: requireAuth()
     },
     {
-      path: '/chatroomlist',
+      path: '/chatroomlist:id',
       name: 'ChatRoomList',
       component: ChatRoomList,
       beforeEnter: requireAuth()
