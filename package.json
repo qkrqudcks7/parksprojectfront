@@ -4,6 +4,7 @@
   "description": "A Vue.js project",
   "author": "qkrqudcks7 <66015002+qkrqudcks7@users.noreply.github.com>",
   "private": true,
+  "homepage": ".",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",

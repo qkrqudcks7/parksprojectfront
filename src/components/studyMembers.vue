@@ -50,11 +50,44 @@
         <button @click="goRoom(i.id)">바로가기</button>
       </div>
     </div>
+    <!--  모달  -->
+    <div class="popup-wrap" v-if="modal">
+      <div class="popup">
+        <div class="popup-head">
+          <h1 class="head-title">{{roomInfo.title}}</h1>
+        </div>
+        <div class="popup-body">
+          <div class="body-content">
+            <div class="body-titlebox">
+              <h5>메세지를 나눠보세요</h5>
+            </div>
+            <div class="body-contentbox" ref="messages">
+              <div v-for="(i, idx) in msg" :key="idx">
+                <div v-bind:class="i.style">
+                  <h5 style="margin:3px">
+                    {{i.name}}
+                  </h5>
+                  {{i.content}}
+                </div>
+              </div>
+            </div>
+            <input type="text" v-model="content" placeholder="보낼 메세지" size="100" />
+          </div>
+        </div>
+        <div class="popup-foot">
+          <span class="pop-btn confirm" id="confirm" @click="sendMessage" @keyup.enter="sendMessage">SEND</span>
+          <span class="pop-btn close" @click="modalClose">창 닫기</span>
+        </div>
+      </div>
+    </div>
   </section>
   </body>
 </template>
 
 <script>
+import Stomp from 'webstomp-client'
+import SockJS from 'sockjs-client'
+
 export default {
   name: 'studyMembers',
   data () {
@@ -64,12 +97,23 @@ export default {
       adminMessage: '',
       isAdMin: false,
       room: [],
-      roomCheck: false
+      roomCheck: false,
+      modal: false,
+      roomInfo: [],
+      msg: [],
+      content: '',
+      stompClient: null
     }
   },
   computed: {
     studyId () {
       return this.$route.params.id
+    },
+    name () {
+      return this.$store.getters.user.name
+    },
+    userId () {
+      return this.$store.getters.user.id
     }
   },
   methods: {
@@ -123,10 +167,52 @@ export default {
         this.roomCheck = true
       }
       if (this.roomCheck) {
-        this.$router.push({name: 'Chatroom', params: {id: id}})
+        this.modal = true
+        this.axios.get(`/chatroom/${id}`).then(response => {
+          if (response.status === 200) {
+            this.roomInfo = response.data
+          }
+        })
+        this.axios.get(`/chatroom/message/${id}`).then(response => {
+          if (response.status === 200) {
+            this.msg = response.data
+          }
+        })
+        let socket = new SockJS('http://localhost:8080/ws')
+        this.stompClient = Stomp.over(socket)
+        this.stompClient.connect({}, frame => {
+          console.log('success', frame)
+          this.stompClient.subscribe(`/sub/${id}`, response => {
+            let jsonBody = JSON.parse(response.body)
+            console.log(jsonBody)
+            let m = {
+              'content': jsonBody.content,
+              'name': jsonBody.name,
+              'style': jsonBody.userId === this.userId ? 'myMsg' : 'otherMsg'
+            }
+            this.msg.push(m)
+          })
+        }, error => {
+          console.log('fail', error)
+        })
       } else {
         alert('멤버가 아니면 입장할 수 없습니다.')
       }
+    },
+    sendMessage () {
+      if (this.content.trim() !== '' && this.stompClient != null) {
+        let chatMessage = {
+          'content': this.content,
+          'name': this.name,
+          'userId': this.userId,
+          'roomId': this.roomInfo.id
+        }
+        this.stompClient.send('/pub/message', JSON.stringify(chatMessage), {})
+        this.content = ''
+      }
+    },
+    modalClose () {
+      this.modal = false
     }
   },
   async created () {
@@ -243,6 +329,75 @@ section {
 }
 .people .state {
   flex: 1;
+}
+.popup-wrap {
+  background-color: rgba(0,0,0,.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+}
+.popup {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  background-color: #0388fc;
+  overflow: hidden;
+  box-shadow: 5px 10px 10px 1px rgba(0,0,0,.3);
+}
+.popup-head {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.popup-body {
+  width: 100%;
+  background-color:#ffffff;
+}
+.body-content {
+  width: 100%;
+  padding: 10px 20px;
+}
+.body-titlebox {
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+}
+.body-contentbox {
+  height: 500px;
+  overflow: auto;
+}
+.popup-foot {
+  width: 100%;
+  height: 50px;
+}
+.pop-btn {
+  display: inline-flex;
+  width: 50%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  float: left;
+  cursor: pointer;
+  color: white;
+}
+.pop-btn.confirm {
+  border-right: 1px solid white;
+}
+.myMsg{
+  text-align: right;
+}
+.otherMsg{
+  text-align: left;
 }
 @media (max-width: 768px) {
   section {

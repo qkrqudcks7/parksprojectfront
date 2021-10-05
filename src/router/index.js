@@ -14,8 +14,6 @@ import StudyMembers from '../components/studyMembers'
 import ModifyStudy from '../components/modifyStudy'
 import MyStudy from '../components/myStudy'
 import Alarm from '../components/alarm'
-import ChatRoomList from '../components/chatRoomList'
-import ChatRoom from '../components/chatRoom'
 
 Vue.use(Router)
 
@@ -98,18 +96,6 @@ export default new Router({
       path: '/alarm',
       name: 'Alarm',
       component: Alarm,
-      beforeEnter: requireAuth()
-    },
-    {
-      path: '/chatroomlist:id',
-      name: 'ChatRoomList',
-      component: ChatRoomList,
-      beforeEnter: requireAuth()
-    },
-    {
-      path: '/chatroom:id',
-      name: 'Chatroom',
-      component: ChatRoom,
       beforeEnter: requireAuth()
     }
   ]
