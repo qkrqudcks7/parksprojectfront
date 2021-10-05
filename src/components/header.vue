@@ -36,16 +36,18 @@ export default {
     }
   },
   mounted () {
-    this.axios.get(`/notification`).then(response => {
-      for (let i in response.data) {
-        if (response.data[i].checked === false) {
-          this.alarmCheck = false
-          break
-        } else {
-          this.alarmCheck = true
+    if (this.$store.getters.user) {
+      this.axios.get(`/notification`).then(response => {
+        for (let i in response.data) {
+          if (response.data[i].checked === false) {
+            this.alarmCheck = false
+            break
+          } else {
+            this.alarmCheck = true
+          }
         }
-      }
-    })
+      })
+    }
   }
 }
 </script>

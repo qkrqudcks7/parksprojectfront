@@ -13,8 +13,8 @@
       </div>
       <div class="sns-login">
         <button class="btn google"><a v-bind:href="getOauthUrl('google')">Login in with Google</a></button>
-        <button class="btn naver">Login in with Naver</button>
-        <button class="btn facebook">Login in with Facebook</button>
+        <button class="btn naver"><a v-bind:href="getOauthUrl('naver')">Login in with Naver</a></button>
+        <button class="btn facebook"><a v-bind:href="getOauthUrl('kakao')">Login in with Kakao</a></button>
       </div>
       <div class="login">
         <button class="btn-login" @click="signup()">회원가입</button>
