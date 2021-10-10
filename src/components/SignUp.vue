@@ -14,7 +14,7 @@
       <div class="sns-login">
         <button class="btn google"><a v-bind:href="getOauthUrl('google')">Login in with Google</a></button>
         <button class="btn naver"><a v-bind:href="getOauthUrl('naver')">Login in with Naver</a></button>
-        <button class="btn facebook"><a v-bind:href="getOauthUrl('kakao')">Login in with Kakao</a></button>
+        <button class="btn facebook"><a id="kakao" v-bind:href="getOauthUrl('kakao')">Login in with Kakao</a></button>
       </div>
       <div class="login">
         <button class="btn-login" @click="signup()">회원가입</button>
@@ -112,7 +112,11 @@ button {
   border-radius: 3px;
 }
 .btn.facebook {
-  background-color: #3b5999;
+  background-color: #ffff00;
+  color: black;
+}
+#kakao {
+  color: black;
 }
 .btn.naver {
   background-color: #03fc28;

@@ -13,7 +13,7 @@ export default {
       this.$emit('getUserDetails')
       this.$router.push('/')
     } else {
-      console.log('error')
+      console.log(onerror)
     }
   }
 }
