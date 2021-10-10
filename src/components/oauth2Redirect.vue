@@ -9,7 +9,7 @@ export default {
     const token = this.$route.query.token
     console.log('토큰값:', token)
     if (token) {
-      this.$store.commit('setToken', token)
+      this.$store.dispatch('setToken', token)
       this.$emit('getUserDetails')
       this.$router.push('/')
     } else {

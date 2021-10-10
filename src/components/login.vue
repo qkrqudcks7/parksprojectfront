@@ -41,7 +41,7 @@ export default {
       try {
         const response = await this.axios.post('/auth/login', this.user)
         notification.success(response, '로그인 성공', () => {
-          this.$store.commit('setToken', response.data.accessToken)
+          this.$store.dispatch('setToken', response.data.accessToken)
           this.$emit('getUserDetails')
           this.$router.push('/')
         })

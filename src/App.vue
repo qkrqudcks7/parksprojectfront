@@ -23,7 +23,7 @@ export default {
         }
         const response = await this.axios.get('/user/info')
         if (response.status === 200) {
-          this.$store.commit('setUserDetail', response.data)
+          await this.$store.dispatch('setUserDetail', response.data)
           console.log('ok')
         }
       } catch (err) {
@@ -34,8 +34,8 @@ export default {
     },
     logout () {
       console.log('로그아웃')
-      this.$store.commit('setToken', null)
-      this.$store.commit('setUserDetail', null)
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setUserDetail', null)
       this.$router.push('/')
     }
   },
